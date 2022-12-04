@@ -1,0 +1,23 @@
+body {
+    padding: 0px;
+    margin: 0px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h1 {
+    font-size: 20px;
+}
+
+div.main {
+    border-radius: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 50px;
+    margin-bottom: 0px;
+    width: 70%;
+    border: solid 0px;
+    background-color: #84aaa6;
+    padding: 10px;
+    text-align: center;
+    height: auto;
+}
