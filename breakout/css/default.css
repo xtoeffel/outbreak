@@ -1,6 +1,8 @@
 body {
+    background-color: #dedede;
+    width: 70%;
     padding: 0px;
-    margin: 0px;
+    margin: 10px auto;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -8,16 +10,16 @@ h1 {
     font-size: 20px;
 }
 
-div.main {
-    border-radius: 10px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 50px;
-    margin-bottom: 0px;
-    width: 70%;
+div.splash {
+    font-size: 18px;
+    font-weight: normal;
+    color: #ffffff;
+    box-shadow: 5px 5px 8px 1px #454545;
+    border-radius: 5px;
+    width: 100%;
     border: solid 0px;
-    background-color: #84aaa6;
-    padding: 10px;
+    background-color: #9b7e43;
+    padding: 4px 8px;
     text-align: center;
     height: auto;
 }
