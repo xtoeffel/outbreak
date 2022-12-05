@@ -4,13 +4,21 @@
 <head>
     <link rel="stylesheet" href="css/default.css">
     <script src="js/breakout.js"></script>
+    <script src="js/brick.js"></script>
+    <script src="js/levels.js"></script>
     <title>Breakout</title>
 </head>
 
-<body>
+<body onload="testCreateBricks()">
     <div class="splash">
-        <h1>Breakout ... the crazy game!</h1>
+        <h1>Breakout !</h1>
+    </div>
 
+    <div class="gamePanel">
+        <div id="bricksContainer"> </div>
+        <div id="void"> </div>
+        <div id="ball"> </div>
+        <div id="bar"></div>
     </div>
 </body>
 
