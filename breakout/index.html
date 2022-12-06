@@ -6,13 +6,14 @@
     <script src="js/breakout.js"></script>
     <script src="js/brick.js"></script>
     <script src="js/levels.js"></script>
-    <script src="js/keys.js"></script>
+    <script src="js/control.js"></script>
     <title>Breakout</title>
 </head>
 
-<body onload="testCreateBricks(); registerKeys()">
+<body onload="testCreateBricks(); registerKeyListener()">
     <div class="splash">
         <h1>Breakout !</h1>
+        <p id="userInfo" class="subCenter">Press <span class="green">SPACE to start</span> new game.</p>
     </div>
 
     <div class="gamePanel">

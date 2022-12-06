@@ -14,6 +14,25 @@ h1 {
     font-size: 20px;
 }
 
+p.subCenter {
+    text-align: center;
+    font-size: 12px;
+    margin: 4px;
+    padding: 0px;
+}
+
+span.blue {
+    color: #5cabff;
+    font-weight: bold;
+    font-style: italic;
+}
+
+span.green {
+    color: forestgreen;
+    font-weight: bold;
+    font-style: italic;
+}
+
 /* make all dimensions relative to some screen size */
 
 div.splash {
@@ -81,8 +100,8 @@ div.gamePanel #bar {
     position: absolute;
     left: 46%;
     bottom: 2%;
-    width: 6vmin;
-    height: 1vmin;
+    width: 10%;
+    height: 1.5%;
     margin: auto;
     padding: 0px;
     background-color: #ac0900;
