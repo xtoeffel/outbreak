@@ -1,24 +1,6 @@
-const stepWidth = 0.3
+const stepWidth = 1.5
 const initLeft = 46
 var gameRunning = false
-
-
-keyListener = (event) => {
-    if (event.key == ' ') {
-        if (gameRunning) {
-            pauseBarMove()
-        } else {
-            startBarMove()
-        }
-    } else if (event.key == 'Escape' && gameRunning) {
-        stopBarMove()
-    }
-}
-
-
-registerKeyListener = () => {
-    document.addEventListener('keydown', keyListener)
-}
 
 
 mouseMoveListener = (event) => {

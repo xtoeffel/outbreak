@@ -59,9 +59,11 @@ div.gamePanel {
     width: 70vmin;
     height: 70vmin;
     margin: 0 auto;
-    background-color: #b3cdce;
+    /* background-color: #b3cdce; */
+    background-color: #cdcdcd;
     padding: 0px;
     box-shadow: 5px 5px 5px darkgray;
+    border: solid gray 1px;
 }
 
 div.gamePanel #bricksContainer {
@@ -123,11 +125,14 @@ div.gamePanel #ball {
     width: 2%;
     height: 2%;
     border-radius: 50%;
+    /* border: solid #2890ff 1px; */
     /* border: solid rgb(255, 85, 55) 1px; */
     box-shadow: 2px 2px 4px 1px #757575;
     margin: 0px;
     padding: 0px;
-    background: radial-gradient(circle at 0.45vmin 0.45vmin, #5cabff, #232323);
+    /* background: #49a1ff; */
+    background: radial-gradient(circle at 0.45vmin 0.45vmin, #3395ff, #404040);
+    /* background: radial-gradient(circle at 0.45vmin 0.45vmin, lightblue, #232323); */
     text-align: center;
     vertical-align: center;
 }
