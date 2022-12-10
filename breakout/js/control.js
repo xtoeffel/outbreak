@@ -1,4 +1,4 @@
-const stepWidth = 0.25
+const stepWidth = 0.3
 const initLeft = 46
 var gameRunning = false
 
@@ -6,12 +6,12 @@ var gameRunning = false
 keyListener = (event) => {
     if (event.key == ' ') {
         if (gameRunning) {
-            pauseGame()
+            pauseBarMove()
         } else {
-            startGame()
+            startBarMove()
         }
     } else if (event.key == 'Escape' && gameRunning) {
-        stopGame()
+        stopBarMove()
     }
 }
 
@@ -33,21 +33,22 @@ mouseMoveListener = (event) => {
 }
 
 
-startGame = () => {
+startBarMove = () => {
     document.addEventListener('mousemove', mouseMoveListener)
+    moveBall()
     var p = document.getElementById('userInfo')
     p.innerHTML = 'Press <span class="blue">ESC to stop</span>, <span class="green">SPACE to pause</span>.'
     gameRunning = true
 }
 
-stopGame = () => {
+stopBarMove = () => {
     document.removeEventListener('mousemove', mouseMoveListener)
     var p = document.getElementById('userInfo')
     p.innerHTML = 'Press <span class="green">SPACE to start</span> new game.'
     gameRunning = false
 }
 
-pauseGame = () => {
+pauseBarMove = () => {
     var p = document.getElementById('userInfo')
     p.innerHTML = 'Press <span class="green">SPACE to continue</span>.'
     gameRunning = false
