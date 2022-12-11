@@ -1,0 +1,103 @@
+:root {
+    --main-width: 10px;
+}
+
+body {
+    /* background-color: #2b2b2b; */
+    background-color: #282828;
+    /* background-image: linear-gradient(to left bottom, #363636, #494949, #5e5e5e, #737373, #898989); */
+    background-repeat: no-repeat;
+    padding: 0px;
+    margin: 10px auto;
+    font-family: 'Press Start 2P', serif;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+h1 {
+    font-size: 48px;
+    text-shadow: 6px 6px dimgray, -2px -2px red;
+}
+
+div.container {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 5px auto 5px auto;
+    padding: 0px;
+    width: 800px;
+    filter: blur(0px);
+}
+
+div.splash {
+    text-align: center;
+    margin: 8px auto 8px auto;
+    width: auto;
+}
+
+p {
+    color: #dfdfdf;
+    font-size: 14px;
+    text-shadow: 3px 3px dimgray;
+}
+
+p span.userKey {
+    color: greenyellow;
+    font-weight: bold;
+}
+
+canvas.game {
+    border: solid 3px transparent;
+    /* background-image: linear-gradient(to right top, #6d6d6d, #828282, #989898, #afafaf, #c6c6c6); */
+    /* background-image: linear-gradient(to right top, #696969, #777777, #868686, #959595, #a4a4a4); */
+    /* background-image: linear-gradient(to right top, #535353, #707070, #8f8f8f, #aeaeae, #cfcfcf); */
+    background-image: linear-gradient(to right top, #535353, #626262, #727272, #828282, #929292);
+    margin: 0 auto;
+}
+
+
+div.screenContainer {
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    background-color: #82828256;
+}
+
+
+div.youLose {
+    position: absolute;
+    visibility: hidden;
+    top: 30vh;
+    left: 30vw;
+    width: 40vw;
+    height: 30vh;
+    padding: 50px 15px 25px 15px;
+    background-image: radial-gradient(circle, #2b6c7e, #2b8292, #2c98a3, #32afb3, #3fc6c0);
+    color: #ffffff;
+    text-shadow: 5px 5px dimgray;
+    text-align: center;
+    vertical-align: middle;
+    border: solid 4px transparent;
+    box-shadow: 10px 10px #848484;
+    filter: blur(0px);
+}
+
+div.youLose h1 {
+    padding-bottom: 30px;
+}
+
+div.youLose p {
+    padding-top: 50px;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 48;
+    font-size: 150px;
+    text-shadow: -2px -2px red, 2px -2px lime, 2px 2px dimgray;
+    color: #e8dac6;
+}

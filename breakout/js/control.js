@@ -1,37 +1,41 @@
-const stepWidth = 1.5
-const initLeft = 46
-var gameRunning = false
 
-
-mouseMoveListener = (event) => {
-    var bar = document.getElementById('bar')
-    var currentLeft = bar.style.left == '' ? initLeft : Number(bar.style.left.replace('%', ''))
-    if (event.movementX < 0 && currentLeft > 0.0) {
-        bar.style.left = (currentLeft - stepWidth) + "%"
-    }
-    if (event.movementX > 0 && currentLeft < 90.0) {
-        bar.style.left = (currentLeft + stepWidth) + "%"
+keyStartStop = (event) => {
+    if (event.key === ' ') {
+        game.toggle()
     }
 }
 
-
-startBarMove = () => {
-    document.addEventListener('mousemove', mouseMoveListener)
-    moveBall()
-    var p = document.getElementById('userInfo')
-    p.innerHTML = 'Press <span class="blue">ESC to stop</span>, <span class="green">SPACE to pause</span>.'
-    gameRunning = true
+keyNewGame = (event) => {
+    if (event.key === 'N' || event.key == 'n') {
+        game.newGame()
+    }
 }
 
-stopBarMove = () => {
-    document.removeEventListener('mousemove', mouseMoveListener)
-    var p = document.getElementById('userInfo')
-    p.innerHTML = 'Press <span class="green">SPACE to start</span> new game.'
-    gameRunning = false
+keyLeftRightDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+        game.paddle.dx = -game.paddle.stepWidth
+    } else if (event.key === 'ArrowRight') {
+        game.paddle.dx = Math.abs(game.paddle.stepWidth)
+    }
 }
 
-pauseBarMove = () => {
-    var p = document.getElementById('userInfo')
-    p.innerHTML = 'Press <span class="green">SPACE to continue</span>.'
-    gameRunning = false
+keyLeftRightUp = (event) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        game.paddle.dx = 0
+    }
+}
+
+
+keyToggleYouLose = (event) => {
+    if (event.key === 'Escape' && document.getElementById('youLose').style.visibility === 'visible')
+        toggleYouLose()
+}
+
+
+registerListeners = () => {
+    document.body.addEventListener('keydown', keyStartStop)
+    document.body.addEventListener('keydown', keyNewGame)
+    document.body.addEventListener('keydown', keyLeftRightDown)
+    document.body.addEventListener('keyup', keyLeftRightUp)
+    document.body.addEventListener('keydown', keyToggleYouLose)
 }

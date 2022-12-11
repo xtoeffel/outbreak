@@ -2,27 +2,40 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="css/game.css">
     <script src="js/breakout.js"></script>
-    <script src="js/brick.js"></script>
-    <script src="js/levels.js"></script>
-    <script src="js/control.js"></script>
     <script src="js/ball.js"></script>
+    <script src="js/paddle.js"></script>
+    <script src="js/control.js"></script>
+    <script src="js/display.js"></script>
     <title>Breakout</title>
 </head>
 
-<body onload="testCreateBricks(); registerKeyListener()">
-    <div class="splash">
-        <h1>Breakout !</h1>
-        <p id="userInfo" class="subCenter">Press <span class="green">SPACE to start</span> new game.</p>
+<body onload="init(); registerListeners();">
+    <div class="container" id="container">
+        <div class="splash">
+            <h1>Breakout!</h1>
+            <p id="userInfo">
+                Press <span class="userKey">N</span> for new game, <span class="userKey">SPACE</span> to pause.
+            </p>
+            <p>
+                Move paddle by <span class="userKey">&lt;=</span> and <span class="userKey">=&gt;</span> keys.
+            </p>
+        </div>
+
+        <canvas class="game" id="game" width="800" height="1024"></canvas>
+
     </div>
 
-    <div class="gamePanel">
-        <div id="bricksContainer"> </div>
-        <div id="void"> </div>
-        <div id="ball"> </div>
-        <div id="bar"></div>
+    <div class="youLose" id="youLose">
+        <h1>You Lose!</h1>
+        <span class="material-symbols-outlined">sentiment_very_dissatisfied</span>
+        <p>Press <span class="userKey">ESC</span> to try again.</p>
     </div>
+
 </body>
 
 </html>
