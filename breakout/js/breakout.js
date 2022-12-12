@@ -7,14 +7,18 @@ init = () => {
 
 /*
 TODO:
-- contain all objects that are on the screen
-- control movement
-- update / redraw
+- counter for points
+- brick blow up animation
+- improve brick-bouncing
+- add special bricks that drop power-ups ... or other shit, like crazy bounce
+- show points in status bar, show power-ups or power-downs
+- add points to brick; use 3rd matrix, add some color change for points
+- show level in statusbar
 */
 class Game {
     constructor() {
-        var ballColor = '#ffffff'
-        var paddleColor = 'lightgreen'
+        var ballColor = '#000000'
+        var paddleColor = '#282828'
         // TODO: remove strokes?
         var ballStroke = '#e4e4e4'
         var paddleStroke = '#e4e4e4'
@@ -27,15 +31,14 @@ class Game {
 
         this.redrawInterval = null
         this.running = false
-        // TODO: add bricks
 
-        // TODO: remove inits, only be called in newGame()
-        this.#initPaddle()
-        this.#initBall()
+        this.bricks = []
+        this.objects = []
+        this.totalPoints = 0
     }
 
     #initPaddle = () => {
-        this.paddle.stepWidth = 4
+        this.paddle.stepWidth = 6
         this.paddle.dx = 0
         this.paddle.dy = 0
         this.paddle.x = this.canvas.width / 2
@@ -49,30 +52,20 @@ class Game {
         this.ball.dy = -3
     }
 
-    // TODO: detect collisions
-    // TODO: move objects
-
-    // loop and move stuff on the field
-    // bounce ball
-    // move panel
-    // move other items
-    // destroy bricks
-
-    /*
-    Collision
-    - list of objects that can collide
-    - call a method collision()
-        - detects if any collision with one of the objects occurs
-        - if so redirects the ball accordingly by setting ball.dx, ball.dy
-        - paddle is the fist object to be in this list ;-)
-    */
-
     newGame = () => {
+        this.bricks = level2()
+        updateLevel('Level 2')
+        this.totalPoints = 0
+        updatePoints(this.totalPoints)
+
         this.#clearContext()
         this.#initPaddle()
         this.#initBall()
         this.ball.draw(this.ctx)
         this.paddle.draw(this.ctx)
+        this.bricks.forEach((b) => b.draw(this.ctx))
+
+        this.objects = [this.paddle].concat(this.bricks)
     }
 
     toggle = () => {
@@ -105,6 +98,7 @@ class Game {
     #redraw = () => {
         this.#clearContext()
 
+        this.bricks.forEach((brick) => { if (!brick.destroyed) { brick.draw(this.ctx) } })
         this.ball.draw(this.ctx)
 
         if (this.paddle.leftX() <= 0)
@@ -122,7 +116,18 @@ class Game {
 
         this.paddle.bounce(this.ball)
 
-        if (this.ball.y > this.paddle.bottomY()) {
+        this.bricks.forEach((brick) => {
+            if (!brick.destroyed) {
+                let bounced = brick.bounce(this.ball)
+                if (bounced) {
+                    brick.destroyed = true
+                    this.totalPoints += brick.points
+                    updatePoints(this.totalPoints)
+                }
+            }
+        })
+
+        if (this.ball.y - this.ball.radius - 5 > this.canvas.height) {
             this.lost()
         }
     }

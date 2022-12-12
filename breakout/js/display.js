@@ -12,3 +12,11 @@ toggleYouLose = () => {
 }
 
 
+updatePoints = (points) => {
+    document.getElementById("points").innerHTML = points
+}
+
+updateLevel = (level) => {
+    document.getElementById('level').innerHTML = level
+}
+

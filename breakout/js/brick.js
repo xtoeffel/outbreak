@@ -1,16 +1,41 @@
-createBrick = (color, width, height, name) => {
-    brick = document.createElement('div')
-    if (name != "")
-        brick.id = name
-    brick.className = "brick"
+class Brick {
+    constructor(x, y, width, height, fillColor, strokeColor) {
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
+        this.fillColor = fillColor
+        this.strokeColor = strokeColor
 
-    // get color a bit darker and set it to
-    // border (as shadow)
-    // set background as color
-    brick.style.backgroundColor = color
-    brick.style.width = width
-    brick.style.height = height
+        this.destroyed = false
+        this.bouncer = new BounceBox()
+        this.points = 10
+    }
 
-    return brick
+    draw = (ctx) => {
+        ctx.fillStyle = this.fillColor
+        ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height)
+        // TODO: outer stroke?
+    }
+
+    leftX = () => {
+        return this.x - this.width / 2
+    }
+
+    rightX = () => {
+        return this.x + this.width / 2
+    }
+
+    topY = () => {
+        return this.y - this.height / 2
+    }
+
+    bottomY = () => {
+        return this.y + this.height / 2
+    }
+
+    bounce = (ball) => {
+        return this.bouncer.bounce(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
+    }
 }
 
