@@ -86,3 +86,69 @@ class BouncePath {
     }
 }
 
+
+// TODO: remove logs
+intersect = (ball, line) => {
+    dy = line.p2.y - line.p1.y
+    dx = line.p2.x - line.p1.x
+    a = - dy / dx
+    b = 1
+    c = -line.p1.y + dy / dx * line.p1.x
+    m = - a / b
+    n = - c / b
+
+    // console.log('dy: ' + dy)
+    // console.log('dx: ' + dx)
+    // console.log('a: ' + a)
+    // console.log('b: ' + b)
+    // console.log('c: ' + c)
+    // console.log('m: ' + m)
+    // console.log('n: ' + n)
+
+
+    if (dx == 0) {
+        // console.log('vertical line')
+        B = -2 * ball.y
+        C = Math.pow(ball.x, 2) + Math.pow(ball.y, 2) + 2 * c / a * ball.x
+        C += Math.pow(c, 2) / Math.pow(a, 2) - Math.pow(ball.radius, 2)
+        D = Math.pow(B, 2) - 4 * C
+
+        // console.log('D: ' + D)
+        if (D < 0) {
+            return null
+        }
+        else {
+            x_p = line.p1.x
+            y_p1 = (-B - Math.sqrt(Math.pow(B, 2) - 4 * C)) / 2
+            y_p2 = (-B + Math.sqrt(Math.pow(B, 2) - 4 * C)) / 2
+            y_p = (y_p1 + y_p2) / 2
+        }
+    }
+    else {
+        // console.log('not vertical line')
+        A = Math.pow(a, 2) / Math.pow(b, 2) + 1
+        B = 2 * (a * c / Math.pow(b, 2) - ball.x + a / b * ball.y)
+        C = Math.pow(ball.x, 2) + Math.pow(ball.y, 2) + 2 * c / b * ball.y
+        C += Math.pow(c, 2) / Math.pow(b, 2) - Math.pow(ball.radius, 2)
+        D = Math.pow(B, 2) - 4 * A * C
+
+        // console.log('D: ' + D)
+        if (D < 0) {
+            return null
+        }
+        else {
+            x_p1 = (-B - Math.sqrt(Math.pow(B, 2) - 4 * A * C)) / (2 * A)
+            x_p2 = (-B + Math.sqrt(Math.pow(B, 2) - 4 * A * C)) / (2 * A)
+            x_p = (x_p1 + x_p2) / 2
+            y_p = x_p * m + n
+        }
+    }
+
+    // console.log('x_p1: ' + x_p1)
+    // console.log('x_p2: ' + x_p2)
+    // console.log('x_p: ' + x_p)
+    // console.log('y_p: ' + y_p)
+
+    return new Point(x_p, y_p)
+}
+

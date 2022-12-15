@@ -1,6 +1,6 @@
 
 class Ball {
-    constructor(radius, fillColor, strokeColor) {
+    constructor(radius, fillColor = 'white', strokeColor = 'black') {
         this.radius = radius
         this.fillColor = fillColor
         this.strokeColor = strokeColor
@@ -8,6 +8,11 @@ class Ball {
         this.y = 0 + radius
         this.dx = 2
         this.dy = 2
+    }
+
+    setCenter = (x, y) => {
+        this.x = x
+        this.y = y
     }
 
     offset = () => {
