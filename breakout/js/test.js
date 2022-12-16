@@ -4,12 +4,20 @@ function assert(statement, message = '') {
     }
 }
 
+function assertEqual(expected, actual, message = '') {
+    if (expected != actual) {
+        throw expected + ' != ' + actual + ' ' + message
+    }
+}
+
+
 function runAllTests() {
     testFunctions = [
-        testIntersect1,
-        testIntersect2,
-        testIntersect3,
-        testIntersect4
+        testIntersectHorizontalContact,
+        testIntersectDiagonal,
+        testIntersectHorizontal,
+        testIntersectionVertical,
+        testIntersectVerticalContact
 
     ]
 
@@ -20,32 +28,61 @@ function runAllTests() {
             element()
             console.log('   ' + element.name + '... SUCCESS')
         }
-        catch {
-            console.log('   ' + element.name + '... FAIL')
+        catch (error) {
+            console.error('   ' + error)
+            console.error('   ' + element.name + '... FAIL')
         }
     });
 }
 
 // TODO: implement more test cases
 // TODO: add edge cases
-function testIntersect1() {
+function testIntersectHorizontalContact() {
     ball = new Ball(10, '', '')
     ball.x = 400
     ball.y = 976
     line = new Line(new Point(400 - 30, 994 - 8), new Point(400 + 30, 994 - 8))
     actual = intersect(ball, line)
-    assert(actual.x === 400)
-    assert(actual.y === 986)
+    assertEqual(400, actual.x)
+    assertEqual(986, actual.y)
 }
 
-function testIntersect2() {
-
+function testIntersectDiagonal() {
+    ball = new Ball(84, '', '')
+    ball.x = 0
+    ball.y = 0
+    line = new Line(new Point(-100, 136), new Point(100, -64))
+    actual = intersect(ball, line)
+    assertEqual(18, actual.x)
+    assertEqual(18, actual.y)
 }
 
-function testIntersect3() {
-
+function testIntersectHorizontal() {
+    ball = new Ball(45, '', '')
+    ball.x = 14
+    ball.y = 0
+    line = new Line(new Point(-100, -36), new Point(100, -36))
+    actual = intersect(ball, line)
+    assertEqual(14, actual.x)
+    assertEqual(-36, actual.y)
 }
 
-function testIntersect4() {
+function testIntersectionVertical() {
+    ball = new Ball(50, '', '')
+    ball.x = 10
+    ball.y = 10
+    line = new Line(new Point(-36, -100), new Point(-36, 100))
+    actual = intersect(ball, line)
+    assertEqual(-36, actual.x)
+    assertEqual(10, actual.y)
+}
 
+function testIntersectVerticalContact() {
+    ball = new Ball(50, '', '')
+    ball.x = 14
+    ball.y = 3
+    line = new Line(new Point(-36, 100), new Point(-36, -100))
+    actual = intersect(ball, line)
+    assertEqual(-36, actual.x)
+    assertEqual(3, actual.y)
 }

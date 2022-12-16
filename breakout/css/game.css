@@ -97,6 +97,8 @@ p span.userKey {
 }
 
 canvas.game {
+    width: 800px;
+    height: 800px;
     border: solid 3px transparent;
     /* background-image: linear-gradient(to right top, #6d6d6d, #828282, #989898, #afafaf, #c6c6c6); */
     /* background-image: linear-gradient(to right top, #696969, #777777, #868686, #959595, #a4a4a4); */

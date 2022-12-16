@@ -57,8 +57,8 @@ class Point {
 
 class Line {
     constructor(p1, p2) {
-        this.p1 = new Point(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y))
-        this.p2 = new Point(Math.max(p1.x, p2.x), Math.max(p1.y, p2.y))
+        this.p1 = p1
+        this.p2 = p2
     }
 }
 
@@ -108,6 +108,9 @@ intersect = (ball, line) => {
 
     if (dx == 0) {
         // console.log('vertical line')
+        // TODO: fix calc of a and c; make sure this is the correct computation
+        a = 1
+        c = line.p1.x
         B = -2 * ball.y
         C = Math.pow(ball.x, 2) + Math.pow(ball.y, 2) + 2 * c / a * ball.x
         C += Math.pow(c, 2) / Math.pow(a, 2) - Math.pow(ball.radius, 2)
