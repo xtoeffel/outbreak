@@ -7,13 +7,10 @@ init = () => {
 
 /*
 TODO:
-- counter for points
 - brick blow up animation
 - improve brick-bouncing
 - add special bricks that drop power-ups ... or other shit, like crazy bounce
 - show points in status bar, show power-ups or power-downs
-- add points to brick; use 3rd matrix, add some color change for points
-- show level in statusbar
 */
 class Game {
     constructor() {
@@ -26,7 +23,7 @@ class Game {
         this.canvas = document.getElementById('game')
         this.ctx = this.canvas.getContext('2d')
 
-        this.ball = new Ball(10, ballColor, ballStroke)
+        this.ball = new Ball(8, ballColor, ballStroke)
         this.paddle = new Paddle(60, 15, paddleColor, paddleStroke)
 
         this.redrawInterval = null
@@ -35,6 +32,14 @@ class Game {
         this.bricks = []
         this.objects = []
         this.totalPoints = 0
+        this.currentLevel = 0
+
+        this.levels = [
+            { 'name': 'Level 1', 'caller': level1 },
+            { 'name': 'Level 2', 'caller': level2 },
+            { 'name': 'Level 3', 'caller': level3 },
+            { 'name': 'Level 4', 'caller': level4 },
+        ]
     }
 
     #initPaddle = () => {
@@ -52,20 +57,21 @@ class Game {
         this.ball.dy = -3
     }
 
+    // TODO: implement
+    showSplash = () => {
+
+    }
+
+    isAllBricksDestroyed = () => {
+        return this.bricks.every(b => b.destroyed)
+    }
+
     newGame = () => {
-        this.bricks = level2()
-        updateLevel('Level 2')
         this.totalPoints = 0
         updatePoints(this.totalPoints)
+        this.currentLevel = 0
 
-        this.#clearContext()
-        this.#initPaddle()
-        this.#initBall()
-        this.ball.draw(this.ctx)
-        this.paddle.draw(this.ctx)
-        this.bricks.forEach((b) => b.draw(this.ctx))
-
-        this.objects = [this.paddle].concat(this.bricks)
+        this.playCurrentLevel()
     }
 
     toggle = () => {
@@ -90,6 +96,36 @@ class Game {
         toggleYouLose()
     }
 
+    won = () => {
+        this.stop()
+        toggleYouWin()
+    }
+
+    playCurrentLevel = () => {
+        this.bricks = this.levels[this.currentLevel].caller()
+        updateLevel(this.levels[this.currentLevel].name)
+
+        this.#clearContext()
+        this.#initPaddle()
+        this.#initBall()
+        this.ball.draw(this.ctx)
+        this.paddle.draw(this.ctx)
+        this.bricks.forEach((b) => b.draw(this.ctx))
+
+        this.objects = [this.paddle].concat(this.bricks)
+    }
+
+    nextLevel = () => {
+        this.stop()
+        if (this.currentLevel == this.levels.length - 1) {
+            toggleYouWin()
+        }
+        else {
+            this.currentLevel += 1
+            this.playCurrentLevel()
+            toggleLevelComplete()
+        }
+    }
 
     #clearContext = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -106,7 +142,6 @@ class Game {
         if (this.paddle.rightX() >= this.canvas.width)
             this.paddle.x = this.canvas.width - this.paddle.width / 2
         this.paddle.draw(this.ctx)
-        this.paddle.offset()
 
         if ((this.ball.x + this.ball.radius) >= this.canvas.width || (this.ball.x - this.ball.radius) <= 0)
             this.ball.dx *= -1
@@ -129,6 +164,9 @@ class Game {
 
         if (this.ball.y - this.ball.radius - 5 > this.canvas.height) {
             this.lost()
+        }
+        if (this.isAllBricksDestroyed()) {
+            this.nextLevel()
         }
     }
 

@@ -1,48 +1,167 @@
-
+/**
+ * Bounces ball off a box.
+ */
 class BounceBox {
 
-    constructor() { }
+    constructor(dBox = -2) {
+        this.dBox = dBox
+    }
 
-    bounce = (ball, leftX, topY, rightX, bottomY) => {
-        if (ball.x >= leftX && ball.x <= rightX) {
-            // ball in vertical projection of paddle
-            if (ball.dy > 0) {
-                // ball moves top down
-                if ((ball.y + ball.radius) == topY) {
-                    ball.dy *= -1
-                    return true
-                }
-            }
-            else if (ball.dy < 0) {
-                // ball moves bottom up
-                if ((ball.y - ball.radius) == bottomY) {
-                    ball.dy *= -1
-                    return true
-                }
+    // TODO: fix weird stick bounce on paddle
+    bounce = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
+        var outerBoundBox = new Box(
+            leftX - ball.radius - this.dBox, topY - ball.radius - this.dBox,
+            rightX + ball.radius + this.dBox, bottomY + ball.radius + this.dBox
+        )
+        var leftSideBoundBox = new Box(leftX - ball.radius - this.dBox, topY, leftX, bottomY)
+        var rightSideBoundBox = new Box(rightX, topY, rightX + ball.radius + this.dBox, bottomY)
 
-            }
-            else
-                throw "ball isn't moving vertically"
+        var topBoundBox = new Box(leftX, topY - ball.radius - this.dBox, rightX, topY)
+        var botBoundBox = new Box(leftX, bottomY, rightX, bottomY + ball.radius + this.dBox)
+
+        if (!outerBoundBox.isCoordsWithin(ball.x, ball.y)) {
+            return false
         }
-        else if (ball.y >= topY && ball.y <= bottomY) {
-            // ball in horizontal projection of paddle
-            if (ball.dx > 0) {
-                // ball moves left right
-                if ((ball.x + ball.radius) == leftX) {
-                    ball.dx *= -1
-                    return true
-                }
-            }
-            else if (ball.dx < 0) {
-                // ball moves right left
-                if ((ball.x - ball.radius) == rightX) {
-                    ball.dx *= -1
-                    return true
-                }
-            }
-            else
-                throw "ball isn't moving horizontally"
+
+        // compute new ball.dx by adding the speed of the counter-movement
+        // that's usually the paddle moving with or against the ball horizontally
+        // first speeds ball up, second slows it down, no paddle move -> no effect
+        var dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
+        // preserve the direction of ball in y-coords
+        var dyBallDir = ball.dy / Math.abs(ball.dy)
+        var dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
+
+        if (leftSideBoundBox.isCoordsWithin(ball.x, ball.y)
+            || rightSideBoundBox.isCoordsWithin(ball.x, ball.y)) {
+            ball.dx *= -1
+            return true
         }
+        if (topBoundBox.isCoordsWithin(ball.x, ball.y)
+            || botBoundBox.isCoordsWithin(ball.x, ball.y)) {
+            ball.dx = dxBall
+            ball.dy = dyBall
+            ball.dy *= -1
+            return true
+        }
+
+        return false
+    }
+
+    // TODO: fix weird edge to center stick bounce on paddle
+    // TODO: remove? edge bounce seems not to work that well
+    // TODO: does small overlap of bound boxes cause weird ball moves?
+    bounceWithEdges = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
+        const dW = 2
+
+        var outerBoundBox = new Box(
+            leftX - ball.radius - dW, topY - ball.radius - dW,
+            rightX + ball.radius + dW, bottomY + ball.radius + dW
+        )
+        var leftSideBoundBox = new Box(leftX - ball.radius - dW, topY, leftX, bottomY)
+        var rightSideBoundBox = new Box(rightX, topY, rightX + ball.radius + dW, bottomY)
+
+        var topBoundBox = new Box(leftX, topY - ball.radius - dW, rightX, topY)
+        var botBoundBox = new Box(leftX, bottomY, rightX, bottomY + ball.radius + dW)
+        // TODO: add increase by 1 to all edge bound boxes
+        var topLeftEdgeBox = new Box(leftX - ball.radius, topY - ball.radius, leftX, topY)
+        var topRightEdgeBox = new Box(rightX, topY - ball.radius, rightX + ball.radius, topY)
+        var botLeftEdgeBox = new Box(leftX - ball.radius, bottomY, leftX, bottomY + ball.radius)
+        var botRightEdgeBox = new Box(rightX, bottomY, rightX + ball.radius, bottomY + ball.radius)
+
+
+        if (!outerBoundBox.isCoordsWithin(ball.x, ball.y)) {
+            return false
+        }
+
+        // compute new ball.dx by adding the speed of the counter-movement
+        // that's usually the paddle moving with or against the ball horizontally
+        // first speeds ball up, second slows it down, no paddle move -> no effect
+        var dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
+        // preserve the direction of ball in y-coords
+        var dyBallDir = ball.dy / Math.abs(ball.dy)
+        var dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
+
+        if (leftSideBoundBox.isCoordsWithin(ball.x, ball.y)
+            || rightSideBoundBox.isCoordsWithin(ball.x, ball.y)) {
+            ball.dx *= -1
+            return true
+        }
+        if (topBoundBox.isCoordsWithin(ball.x, ball.y)
+            || botBoundBox.isCoordsWithin(ball.x, ball.y)) {
+            ball.dx = dxBall
+            ball.dy = dyBall
+            ball.dy *= -1
+            return true
+        }
+
+        if (topLeftEdgeBox.isCoordsWithin(ball.x, ball.y)) {
+            if (ball.dx < 0 && ball.dy > 0) {
+                ball.dx = dxBall
+                ball.dy = dyBall
+                ball.dy *= -1
+            }
+            else if (ball.dx > 0 && ball.dy < 0) {
+                ball.dx *= -1
+            }
+            else {
+                ball.dx = dxBall
+                ball.dy = dyBall
+                ball.dx *= -1
+                ball.dy *= -1
+            }
+            return true
+        }
+        if (topRightEdgeBox.isCoordsWithin(ball.x, ball.y)) {
+            if (ball.dx > 0 && ball.dy > 0) {
+                ball.dx = dxBall
+                ball.dy = dyBall
+                ball.dy *= -1
+            }
+            else if (ball.dx < 0 && ball.dy < 0) {
+                ball.dx *= -1
+            }
+            else {
+                ball.dx = dxBall
+                ball.dy = dyBall
+                ball.dx *= -1
+                ball.dy *= -1
+            }
+            return true
+        }
+        if (botLeftEdgeBox.isCoordsWithin(ball.x, ball.y)) {
+            if (ball.dx > 0 && ball.dy > 0) {
+                ball.dx *= -1
+            }
+            else if (ball.dx < 0 && ball.dy < 0) {
+                ball.dx = dxBall
+                ball.dy = dyBall
+                ball.dy *= -1
+            }
+            else {
+                ball.dx = dxBall
+                ball.dy = dyBall
+                ball.dx *= -1
+                ball.dy *= -1
+            }
+            return true
+        }
+        if (botRightEdgeBox.isCoordsWithin(ball.x, ball.y)) {
+            if (ball.dx < 0 && ball.dy > 0) {
+                ball.dx *= -1
+            } else if (ball.dx > 0 && ball.dy < 0) {
+                ball.dx = dxBall
+                ball.dy = dyBall
+                ball.dy *= -1
+            } else {
+                ball.dx = dxBall
+                ball.dy = dyBall
+                ball.dx *= -1
+                ball.dy *= -1
+            }
+            return true
+        }
+
+        return false
     }
 }
 
@@ -63,95 +182,30 @@ class Line {
 }
 
 
-class BouncePath {
-    constructor(lines) {
-        this.lines = lines
+class Box {
+    constructor(leftX, topY, rightX, bottomY) {
+        this.leftX = leftX
+        this.topY = topY
+        this.rightX = rightX
+        this.bottomY = bottomY
     }
 
-    #intersect = (ball, line) => {
-        // check if ball and line intersect
-        // if so return the point of intersection
-        if (ball.x + ball.radius < line.p1.x || ball.x - ball.radius > p2.x)
-            return null
-        if (ball.y + ball.radius < line.p1.y || ball.y - ball.radius > p2.y)
-            return null
-
+    isPointWithin = (point) => {
+        return this.isCoordsWithin(point.x, point.y)
     }
 
-    bounce = (ball) => {
-        // loop over all lines
-        // intersect with ball
-        // if there's an intersection
-        // it should be bouncing :)
+    isCoordsWithin = (x, y) => {
+        return (x >= this.leftX && x <= this.rightX && y >= this.topY && y <= this.bottomY)
     }
 }
 
 
-// TODO: remove logs
-intersect = (ball, line) => {
-    dy = line.p2.y - line.p1.y
-    dx = line.p2.x - line.p1.x
-    a = - dy / dx
-    b = 1
-    c = -line.p1.y + dy / dx * line.p1.x
-    m = - a / b
-    n = - c / b
-
-    // console.log('dy: ' + dy)
-    // console.log('dx: ' + dx)
-    // console.log('a: ' + a)
-    // console.log('b: ' + b)
-    // console.log('c: ' + c)
-    // console.log('m: ' + m)
-    // console.log('n: ' + n)
-
-
-    if (dx == 0) {
-        // console.log('vertical line')
-        // TODO: fix calc of a and c; make sure this is the correct computation
-        a = 1
-        c = line.p1.x
-        B = -2 * ball.y
-        C = Math.pow(ball.x, 2) + Math.pow(ball.y, 2) + 2 * c / a * ball.x
-        C += Math.pow(c, 2) / Math.pow(a, 2) - Math.pow(ball.radius, 2)
-        D = Math.pow(B, 2) - 4 * C
-
-        // console.log('D: ' + D)
-        if (D < 0) {
-            return null
-        }
-        else {
-            x_p = line.p1.x
-            y_p1 = (-B - Math.sqrt(Math.pow(B, 2) - 4 * C)) / 2
-            y_p2 = (-B + Math.sqrt(Math.pow(B, 2) - 4 * C)) / 2
-            y_p = (y_p1 + y_p2) / 2
-        }
-    }
-    else {
-        // console.log('not vertical line')
-        A = Math.pow(a, 2) / Math.pow(b, 2) + 1
-        B = 2 * (a * c / Math.pow(b, 2) - ball.x + a / b * ball.y)
-        C = Math.pow(ball.x, 2) + Math.pow(ball.y, 2) + 2 * c / b * ball.y
-        C += Math.pow(c, 2) / Math.pow(b, 2) - Math.pow(ball.radius, 2)
-        D = Math.pow(B, 2) - 4 * A * C
-
-        // console.log('D: ' + D)
-        if (D < 0) {
-            return null
-        }
-        else {
-            x_p1 = (-B - Math.sqrt(Math.pow(B, 2) - 4 * A * C)) / (2 * A)
-            x_p2 = (-B + Math.sqrt(Math.pow(B, 2) - 4 * A * C)) / (2 * A)
-            x_p = (x_p1 + x_p2) / 2
-            y_p = x_p * m + n
-        }
-    }
-
-    // console.log('x_p1: ' + x_p1)
-    // console.log('x_p2: ' + x_p2)
-    // console.log('x_p: ' + x_p)
-    // console.log('y_p: ' + y_p)
-
-    return new Point(x_p, y_p)
+/**
+ * Computes distance between two points.
+ * 
+ * @param {Point} p1 first point
+ * @param {Point} p2 second point
+ */
+function dist(p1, p2) {
+    return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2))
 }
-

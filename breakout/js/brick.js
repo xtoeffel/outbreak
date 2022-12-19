@@ -1,5 +1,5 @@
 class Brick {
-    constructor(x, y, width, height, fillColor, strokeColor) {
+    constructor(x, y, width, height, fillColor, strokeColor, points = 10) {
         this.x = x
         this.y = y
         this.width = width
@@ -9,7 +9,8 @@ class Brick {
 
         this.destroyed = false
         this.bouncer = new BounceBox()
-        this.points = 10
+        // this.bouncer = new BouncePath()
+        this.points = points
     }
 
     draw = (ctx) => {
@@ -36,6 +37,13 @@ class Brick {
 
     bounce = (ball) => {
         return this.bouncer.bounce(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
+        // var outLines = [
+        //     new Line(new Point(this.leftX(), this.topY()), new Point(this.rightX(), this.topY())),
+        //     new Line(new Point(this.leftX(), this.topY()), new Point(this.leftX(), this.bottomY())),
+        //     new Line(new Point(this.rightX(), this.topY()), new Point(this.rightX(), this.bottomY())),
+        //     new Line(new Point(this.leftX(), this.bottomY()), new Point(this.rightX(), this.bottomY())),
+        // ]
+        // return this.bouncer.bounce(ball, outLines)
     }
 }
 

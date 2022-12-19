@@ -11,78 +11,63 @@ function assertEqual(expected, actual, message = '') {
 }
 
 
+function assertTrue(actual, message = '') {
+    if (!actual) {
+        throw 'not true ' + message
+    }
+}
+
+
+function assertFalse(actual, message = '') {
+    if (actual) {
+        throw 'not false ' + message
+    }
+}
+
+
 function runAllTests() {
     testFunctions = [
-        testIntersectHorizontalContact,
-        testIntersectDiagonal,
-        testIntersectHorizontal,
-        testIntersectionVertical,
-        testIntersectVerticalContact
-
+        testDist,
+        testBoxIsWithin
     ]
 
-    // TODO: show a summary
     testFunctions.forEach(element => {
         try {
-            console.log('running ' + element.name)
             element()
-            console.log('   ' + element.name + '... SUCCESS')
+            console.log('SUCCESS <- ' + element.name)
         }
         catch (error) {
-            console.error('   ' + error)
-            console.error('   ' + element.name + '... FAIL')
+            console.error('FAIL <- ' + element.name)
+            console.error(error)
         }
     });
 }
 
-// TODO: implement more test cases
-// TODO: add edge cases
-function testIntersectHorizontalContact() {
-    ball = new Ball(10, '', '')
-    ball.x = 400
-    ball.y = 976
-    line = new Line(new Point(400 - 30, 994 - 8), new Point(400 + 30, 994 - 8))
-    actual = intersect(ball, line)
-    assertEqual(400, actual.x)
-    assertEqual(986, actual.y)
+
+function testDist() {
+    p1 = new Point(10, 20)
+    p2 = new Point(10, 30)
+    p3 = new Point(12, -10)
+    p4 = new Point(90, 20)
+    actual1 = dist(p1, p2)
+    actual2 = dist(p2, p3)
+    actual3 = dist(p3, p1)
+    actual4 = dist(p1, p3)
+    actual5 = dist(p1, p4)
+    assertEqual(10, actual1)
+    assertEqual(Math.sqrt(1604), actual2)
+    assertEqual(Math.sqrt(904), actual3)
+    assertEqual(actual3, actual4)
+    assertEqual(80, actual5)
 }
 
-function testIntersectDiagonal() {
-    ball = new Ball(84, '', '')
-    ball.x = 0
-    ball.y = 0
-    line = new Line(new Point(-100, 136), new Point(100, -64))
-    actual = intersect(ball, line)
-    assertEqual(18, actual.x)
-    assertEqual(18, actual.y)
-}
 
-function testIntersectHorizontal() {
-    ball = new Ball(45, '', '')
-    ball.x = 14
-    ball.y = 0
-    line = new Line(new Point(-100, -36), new Point(100, -36))
-    actual = intersect(ball, line)
-    assertEqual(14, actual.x)
-    assertEqual(-36, actual.y)
-}
-
-function testIntersectionVertical() {
-    ball = new Ball(50, '', '')
-    ball.x = 10
-    ball.y = 10
-    line = new Line(new Point(-36, -100), new Point(-36, 100))
-    actual = intersect(ball, line)
-    assertEqual(-36, actual.x)
-    assertEqual(10, actual.y)
-}
-
-function testIntersectVerticalContact() {
-    ball = new Ball(50, '', '')
-    ball.x = 14
-    ball.y = 3
-    line = new Line(new Point(-36, 100), new Point(-36, -100))
-    actual = intersect(ball, line)
-    assertEqual(-36, actual.x)
-    assertEqual(3, actual.y)
+function testBoxIsWithin() {
+    box = new Box(-2, -2, 2, 2)
+    assertTrue(box.isCoordsWithin(0, 0))
+    assertTrue(box.isPointWithin(new Point(0, 0)))
+    assertTrue(box.isCoordsWithin(2, 2))
+    assertTrue(box.isPointWithin(new Point(-2, 2)))
+    assertFalse(box.isPointWithin(new Point(-5, 5)))
+    assertFalse(box.isPointWithin(new Point(5, 5)))
 }

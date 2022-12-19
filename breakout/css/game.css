@@ -97,8 +97,6 @@ p span.userKey {
 }
 
 canvas.game {
-    width: 800px;
-    height: 800px;
     border: solid 3px transparent;
     /* background-image: linear-gradient(to right top, #6d6d6d, #828282, #989898, #afafaf, #c6c6c6); */
     /* background-image: linear-gradient(to right top, #696969, #777777, #868686, #959595, #a4a4a4); */
@@ -113,12 +111,12 @@ canvas.game {
 div.youLose {
     position: absolute;
     visibility: hidden;
-    top: 30vh;
-    left: 30vw;
-    width: 40vw;
+    top: 25vh;
+    left: 25vw;
+    width: 50vw;
     height: auto;
     padding: 50px 15px 25px 15px;
-    background-image: radial-gradient(circle, #2b6c7e, #2b8292, #2c98a3, #32afb3, #3fc6c0);
+    background-image: radial-gradient(circle, #bc593d, #c5673c, #cc763b, #d2853a, #d6943b);
     color: #ffffff;
     text-shadow: 5px 5px dimgray;
     text-align: center;
@@ -136,14 +134,60 @@ div.youLose p {
     padding-top: 50px;
 }
 
-.you-lose-icon {
-    font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 48;
 
+div.youWin {
+    position: absolute;
+    visibility: hidden;
+    top: 25vh;
+    left: 25vw;
+    width: 50vw;
+    height: auto;
+    padding: 50px 15px 25px 15px;
+    background-image: radial-gradient(circle, #2b6c7e, #2b8292, #2c98a3, #32afb3, #3fc6c0);
+    color: #ffffff;
+    text-shadow: 5px 5px dimgray;
+    text-align: center;
+    vertical-align: middle;
+    border: solid 4px transparent;
+    box-shadow: 10px 10px #848484;
+    filter: blur(0px);
 }
+
+div.youWin h1 {
+    padding-bottom: 30px;
+}
+
+div.youWin p {
+    padding-top: 50px;
+}
+
+
+div.levelComplete {
+    position: absolute;
+    visibility: hidden;
+    top: 25vh;
+    left: 25vw;
+    width: 50vw;
+    height: auto;
+    padding: 50px 15px 25px 15px;
+    background-image: radial-gradient(circle, #0d6420, #107424, #158327, #1a942a, #21a42c);
+    color: #ffffff;
+    text-shadow: 5px 5px dimgray;
+    text-align: center;
+    vertical-align: middle;
+    border: solid 4px transparent;
+    box-shadow: 10px 10px #848484;
+    filter: blur(0px);
+}
+
+div.levelComplete h1 {
+    padding-bottom: 30px;
+}
+
+div.levelComplete p {
+    padding-top: 50px;
+}
+
 
 .material-symbols-outlined {
     font-variation-settings:

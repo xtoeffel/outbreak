@@ -11,6 +11,7 @@ class Paddle {
         this.dx = 0
         this.dy = 0
 
+        // this.bouncer = new BouncePath()
         this.bouncer = new BounceBox()
     }
 
@@ -43,6 +44,7 @@ class Paddle {
     }
 
     bounce = (ball) => {
+        // TODO: fix the dx-setting, seems not to work
         return this.bouncer.bounce(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
     }
 

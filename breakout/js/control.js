@@ -7,21 +7,10 @@ keyStartStop = (event) => {
 
 keyNewGame = (event) => {
     if (event.key === 'N' || event.key == 'n') {
+        if (game.isAllBricksDestroyed()) {
+            toggleYouWin()
+        }
         game.newGame()
-    }
-}
-
-keyLeftRightDown = (event) => {
-    if (event.key === 'ArrowLeft') {
-        game.paddle.dx = -game.paddle.stepWidth
-    } else if (event.key === 'ArrowRight') {
-        game.paddle.dx = Math.abs(game.paddle.stepWidth)
-    }
-}
-
-keyLeftRightUp = (event) => {
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        game.paddle.dx = 0
     }
 }
 
@@ -31,11 +20,25 @@ keyToggleYouLose = (event) => {
         toggleYouLose()
 }
 
+keyToggleLevelComplete = (event) => {
+    if (event.key === 'Enter' && document.getElementById('levelComplete').style.visibility === 'visible')
+        toggleLevelComplete()
+}
+
+
+mouseMove = (event) => {
+    const relativeX = event.clientX - (document.body.clientWidth - game.canvas.clientWidth) / 2
+    if (relativeX > 0 && relativeX < game.canvas.width) {
+        game.paddle.dx = relativeX - game.paddle.x
+        game.paddle.x = relativeX
+    }
+}
+
 
 registerListeners = () => {
     document.body.addEventListener('keydown', keyStartStop)
     document.body.addEventListener('keydown', keyNewGame)
-    document.body.addEventListener('keydown', keyLeftRightDown)
-    document.body.addEventListener('keyup', keyLeftRightUp)
     document.body.addEventListener('keydown', keyToggleYouLose)
+    document.body.addEventListener('keydown', keyToggleLevelComplete)
+    document.addEventListener('mousemove', mouseMove)
 }

@@ -30,4 +30,8 @@ class Ball {
         // ctx.stroke();
         ctx.closePath()
     }
+
+    velocity = () => {
+        return Math.sqrt(Math.pow(this.dx, 2) + Math.pow(this.dy, 2))
+    }
 }

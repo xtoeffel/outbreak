@@ -31,7 +31,7 @@
             </p>
         </div>
 
-        <canvas class="game" id="game" width="800" height="800"></canvas>
+        <canvas class="game" id="game" width="800" height="600"></canvas>
 
         <div id="statusbar">
             <table>
@@ -50,9 +50,27 @@
         <h1>You Lose!</h1>
         <span class="material-symbols-outlined"
             style="font-size: 150px; text-shadow: -2px -2px red, 2px -2px lime, 2px 2px dimgray; color: #e8dac6;">
-            sentiment_very_dissatisfied
+            skull
         </span>
         <p>Press <span class="userKey">ESC</span> to try again.</p>
+    </div>
+
+    <div class="youWin" id="youWin">
+        <h1>You Win!</h1>
+        <span class="material-symbols-outlined"
+            style="font-size: 150px; text-shadow: -2px -2px red, 2px -2px lime, 2px 2px dimgray; color: #e8dac6;">
+            sentiment_very_satisfied
+        </span>
+        <p>Press <span class="userKey">N</span> to play again.</p>
+    </div>
+
+    <div class="levelComplete" id="levelComplete">
+        <h1>Level<br>Complete!</h1>
+        <span class="material-symbols-outlined"
+            style="font-size: 150px; text-shadow: -2px -2px red, 2px -2px lime, 2px 2px dimgray; color: #e8dac6;">
+            sentiment_satisfied
+        </span>
+        <p>Press <span class="userKey">ENTER</span> for next level.</p>
     </div>
 
 </body>

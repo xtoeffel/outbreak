@@ -1,14 +1,26 @@
-toggleYouLose = () => {
+toggleVisibility = (divName) => {
     container = document.getElementById('container')
-    youLoseDiv = document.getElementById('youLose')
-    if (youLoseDiv.style.visibility == '' || youLoseDiv.style.visibility === 'hidden') {
-        youLoseDiv.style.visibility = 'visible';
+    div = document.getElementById(divName)
+    if (div.style.visibility == '' || div.style.visibility === 'hidden') {
+        div.style.visibility = 'visible';
         container.style.filter = 'blur(10px)'
     }
     else {
-        youLoseDiv.style.visibility = 'hidden';
+        div.style.visibility = 'hidden';
         container.style.filter = ''
     }
+}
+
+toggleYouLose = () => {
+    toggleVisibility('youLose')
+}
+
+toggleLevelComplete = () => {
+    toggleVisibility('levelComplete')
+}
+
+toggleYouWin = () => {
+    toggleVisibility('youWin')
 }
 
 
@@ -19,4 +31,6 @@ updatePoints = (points) => {
 updateLevel = (level) => {
     document.getElementById('level').innerHTML = level
 }
+
+
 
