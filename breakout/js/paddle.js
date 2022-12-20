@@ -45,7 +45,8 @@ class Paddle {
 
     bounce = (ball) => {
         // TODO: fix the dx-setting, seems not to work
-        return this.bouncer.bounce(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
+        // return this.bouncer.bounce(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
+        return this.bouncer.bounceWithEdges(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
     }
 
 }

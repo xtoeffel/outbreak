@@ -62,11 +62,11 @@ class BounceBox {
 
         var topBoundBox = new Box(leftX, topY - ball.radius - dW, rightX, topY)
         var botBoundBox = new Box(leftX, bottomY, rightX, bottomY + ball.radius + dW)
-        // TODO: add increase by 1 to all edge bound boxes
-        var topLeftEdgeBox = new Box(leftX - ball.radius, topY - ball.radius, leftX, topY)
-        var topRightEdgeBox = new Box(rightX, topY - ball.radius, rightX + ball.radius, topY)
-        var botLeftEdgeBox = new Box(leftX - ball.radius, bottomY, leftX, bottomY + ball.radius)
-        var botRightEdgeBox = new Box(rightX, bottomY, rightX + ball.radius, bottomY + ball.radius)
+
+        var topLeftEdgeBox = new Box(leftX - ball.radius - dW, topY - ball.radius - dW, leftX, topY)
+        var topRightEdgeBox = new Box(rightX, topY - ball.radius - dW, rightX + ball.radius + dW, topY)
+        var botLeftEdgeBox = new Box(leftX - ball.radius - dW, bottomY, leftX, bottomY + ball.radius + dW)
+        var botRightEdgeBox = new Box(rightX, bottomY, rightX + ball.radius + dW, bottomY + ball.radius + dW)
 
 
         if (!outerBoundBox.isCoordsWithin(ball.x, ball.y)) {
