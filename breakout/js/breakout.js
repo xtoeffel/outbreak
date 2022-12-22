@@ -53,8 +53,9 @@ class Game {
     #initBall = () => {
         this.ball.x = this.paddle.x
         this.ball.y = this.paddle.topY() - this.ball.radius
-        this.ball.dx = 3
-        this.ball.dy = -3
+        var xDir = Math.random() > 0.5 ? -1 : 1
+        this.ball.dx = xDir * 3
+        this.ball.dy = - 3
     }
 
     // TODO: implement

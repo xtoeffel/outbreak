@@ -3,26 +3,37 @@
  */
 class BounceBox {
 
-    constructor(dBox = -2) {
+    constructor(dBox = 0) {
         this.dBox = dBox
     }
 
     // TODO: fix weird stick bounce on paddle
     bounce = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
-        var outerBoundBox = new Box(
+        var outerBox = new Box(
             leftX - ball.radius - this.dBox, topY - ball.radius - this.dBox,
             rightX + ball.radius + this.dBox, bottomY + ball.radius + this.dBox
         )
-        var leftSideBoundBox = new Box(leftX - ball.radius - this.dBox, topY, leftX, bottomY)
-        var rightSideBoundBox = new Box(rightX, topY, rightX + ball.radius + this.dBox, bottomY)
-
-        var topBoundBox = new Box(leftX, topY - ball.radius - this.dBox, rightX, topY)
-        var botBoundBox = new Box(leftX, bottomY, rightX, bottomY + ball.radius + this.dBox)
-
-        if (!outerBoundBox.isCoordsWithin(ball.x, ball.y)) {
+        if (!outerBox.isCoordsWithin(ball.x, ball.y)) {
             return false
         }
 
+        var leftSideBox = new Box(
+            leftX - ball.radius - this.dBox, topY - ball.radius / 2,
+            leftX, bottomY + ball.radius / 2
+        )
+        var rightSideBox = new Box(
+            rightX, topY - ball.radius / 2,
+            rightX + ball.radius + this.dBox, bottomY + ball.radius / 2
+        )
+
+        var topBox = new Box(
+            leftX - ball.radius / 2, topY - ball.radius - this.dBox,
+            rightX + ball.radius / 2, topY
+        )
+        var botBox = new Box(
+            leftX - ball.radius / 2, bottomY,
+            rightX + ball.radius / 2, bottomY + ball.radius + this.dBox
+        )
         // compute new ball.dx by adding the speed of the counter-movement
         // that's usually the paddle moving with or against the ball horizontally
         // first speeds ball up, second slows it down, no paddle move -> no effect
@@ -31,13 +42,13 @@ class BounceBox {
         var dyBallDir = ball.dy / Math.abs(ball.dy)
         var dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
 
-        if (leftSideBoundBox.isCoordsWithin(ball.x, ball.y)
-            || rightSideBoundBox.isCoordsWithin(ball.x, ball.y)) {
+        if (leftSideBox.isCoordsWithin(ball.x, ball.y)
+            || rightSideBox.isCoordsWithin(ball.x, ball.y)) {
             ball.dx *= -1
             return true
         }
-        if (topBoundBox.isCoordsWithin(ball.x, ball.y)
-            || botBoundBox.isCoordsWithin(ball.x, ball.y)) {
+        if (topBox.isCoordsWithin(ball.x, ball.y)
+            || botBox.isCoordsWithin(ball.x, ball.y)) {
             ball.dx = dxBall
             ball.dy = dyBall
             ball.dy *= -1
@@ -51,7 +62,7 @@ class BounceBox {
     // TODO: remove? edge bounce seems not to work that well
     // TODO: does small overlap of bound boxes cause weird ball moves?
     bounceWithEdges = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
-        const dW = 2
+        const dW = 0
 
         var outerBoundBox = new Box(
             leftX - ball.radius - dW, topY - ball.radius - dW,

@@ -9,7 +9,6 @@ class Brick {
 
         this.destroyed = false
         this.bouncer = new BounceBox()
-        // this.bouncer = new BouncePath()
         this.points = points
     }
 
