@@ -23,8 +23,8 @@ class Game {
         this.canvas = document.getElementById('game')
         this.ctx = this.canvas.getContext('2d')
 
-        this.ball = new Ball(8, ballColor, ballStroke)
-        this.paddle = new Paddle(60, 15, paddleColor, paddleStroke)
+        this.ball = new Ball(6, ballColor, ballStroke)
+        this.paddle = new Paddle(60, 10, paddleColor, paddleStroke)
 
         this.redrawInterval = null
         this.running = false
@@ -39,6 +39,8 @@ class Game {
             { 'name': 'Level 2', 'caller': level2 },
             { 'name': 'Level 3', 'caller': level3 },
             { 'name': 'Level 4', 'caller': level4 },
+            { 'name': 'Level 5', 'caller': level5 },
+            { 'name': 'Level 6', 'caller': level6 },
         ]
     }
 
@@ -137,18 +139,22 @@ class Game {
 
         this.bricks.forEach((brick) => { if (!brick.destroyed) { brick.draw(this.ctx) } })
         this.ball.draw(this.ctx)
+        this.ball.offset()
 
         if (this.paddle.leftX() <= 0)
             this.paddle.x = 0 + this.paddle.width / 2
         if (this.paddle.rightX() >= this.canvas.width)
             this.paddle.x = this.canvas.width - this.paddle.width / 2
+
+        // I don't want to play, I just want to win!
+        // this.paddle.x = this.ball.x
         this.paddle.draw(this.ctx)
 
         if ((this.ball.x + this.ball.radius) >= this.canvas.width || (this.ball.x - this.ball.radius) <= 0)
             this.ball.dx *= -1
         if ((this.ball.y - this.ball.radius) <= 0)
             this.ball.dy *= -1
-        this.ball.offset()
+
 
         this.paddle.bounce(this.ball)
 
