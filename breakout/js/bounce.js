@@ -1,6 +1,4 @@
-/**
- * Bounces ball off a box.
- */
+
 class BounceBox {
 
     constructor(dBox = 0) {
@@ -57,11 +55,19 @@ class BounceBox {
 
         return false
     }
+}
+
+
+class BounceBoxWithEdges {
+
+    constructor(dBox = 0) {
+        this.dBox = dBox
+    }
 
     // TODO: fix weird edge to center stick bounce on paddle
     // TODO: remove? edge bounce seems not to work that well
     // TODO: does small overlap of bound boxes cause weird ball moves?
-    bounceWithEdges = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
+    bounce = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
         const dW = 0
 
         var outerBoundBox = new Box(
@@ -169,6 +175,67 @@ class BounceBox {
                 ball.dx *= -1
                 ball.dy *= -1
             }
+            return true
+        }
+
+        return false
+    }
+}
+
+
+class BounceBoxCrazy {
+
+    constructor(dBox = 0) {
+        this.dBox = dBox
+    }
+
+    bounce = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
+        var outerBox = new Box(
+            leftX - ball.radius - this.dBox, topY - ball.radius - this.dBox,
+            rightX + ball.radius + this.dBox, bottomY + ball.radius + this.dBox
+        )
+        if (!outerBox.isCoordsWithin(ball.x, ball.y)) {
+            return false
+        }
+
+        var leftSideBox = new Box(
+            leftX - ball.radius - this.dBox, topY - ball.radius / 2,
+            leftX, bottomY + ball.radius / 2
+        )
+        var rightSideBox = new Box(
+            rightX, topY - ball.radius / 2,
+            rightX + ball.radius + this.dBox, bottomY + ball.radius / 2
+        )
+
+        var topBox = new Box(
+            leftX - ball.radius / 2, topY - ball.radius - this.dBox,
+            rightX + ball.radius / 2, topY
+        )
+        var botBox = new Box(
+            leftX - ball.radius / 2, bottomY,
+            rightX + ball.radius / 2, bottomY + ball.radius + this.dBox
+        )
+        // compute new ball.dx by adding the speed of the counter-movement
+        // that's usually the paddle moving with or against the ball horizontally
+        // first speeds ball up, second slows it down, no paddle move -> no effect
+        var dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
+        // preserve the direction of ball in y-coords
+        var dyBallDir = ball.dy / Math.abs(ball.dy)
+        var dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
+
+        var dir = Math.random() > 0.5 ? 1 : -1
+        if (leftSideBox.isCoordsWithin(ball.x, ball.y)
+            || rightSideBox.isCoordsWithin(ball.x, ball.y)) {
+            ball.dx *= -1
+            ball.dy *= dir
+            return true
+        }
+        if (topBox.isCoordsWithin(ball.x, ball.y)
+            || botBox.isCoordsWithin(ball.x, ball.y)) {
+            ball.dx = dxBall
+            ball.dy = dyBall
+            ball.dy *= -1
+            ball.dx *= dir
             return true
         }
 

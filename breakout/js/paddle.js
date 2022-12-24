@@ -11,8 +11,8 @@ class Paddle {
         this.dx = 0
         this.dy = 0
 
-        // this.bouncer = new BouncePath()
-        this.bouncer = new BounceBox()
+        this.isMoveable = true
+        this.bouncer = new BounceBoxWithEdges()
     }
 
 
@@ -23,8 +23,17 @@ class Paddle {
     }
 
     offset = () => {
-        this.x += this.dx
-        this.y += this.dy
+        if (this.isMoveable) {
+            this.x += this.dx
+            this.y += this.dy
+        }
+    }
+
+    moveTo = (x, y) => {
+        if (this.isMoveable) {
+            this.x = x
+            this.y = y
+        }
     }
 
     leftX = () => {
@@ -43,10 +52,8 @@ class Paddle {
         return this.y + this.height / 2
     }
 
-    bounce = (ball) => {
-        // TODO: fix the dx-setting, seems not to work
-        // return this.bouncer.bounce(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
-        return this.bouncer.bounceWithEdges(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
+    bounce = (ballOrDropItem) => {
+        return this.bouncer.bounce(ballOrDropItem, this.leftX(), this.topY(), this.rightX(), this.bottomY())
     }
 
 }

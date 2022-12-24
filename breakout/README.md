@@ -21,6 +21,23 @@ The paddle can only move left or right.
 
 A life is lost if the ball passes the paddle and falls in the pit.
 
+## Drops
+
+Some bricks drop items when hit by the ball. 
+These drops can be picked up by the paddle. 
+While some are good others are bad. 
+
+* &#9924; ICE: freezes paddle for a brief time
+* &#128405; SHRINK: makes paddle permanently smaller
+* &#128406; EXTEND: makes paddle permanently larger
+* &#128123; FUZZ: game looks briefly fuzzy
+* &#128064; GLASS: paddle turns into glass for a short time
+* &#128007; FAST: speeds up ball for a short time
+* &#128012; SLOW: slows down ball for a short time
+* &#127744; CRAZY-BOUNCE: ball bounces funny for some time
+* &#128128; DEAD: instant death
+* &#128169; POOP: you stepped in poop which brings luck ;)
+
 ## Implementation
 
-The game runs in the browser, its :balloon: programmed `HTML` and `JavaScript`.
+The game runs in the browser, it's :balloon: programmed `HTML` and `JavaScript`.

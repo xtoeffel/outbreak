@@ -22,6 +22,7 @@ class Game {
 
         this.canvas = document.getElementById('game')
         this.ctx = this.canvas.getContext('2d')
+        this.powerItemsDomElement = document.getElementById('powerItems')
 
         this.ball = new Ball(6, ballColor, ballStroke)
         this.paddle = new Paddle(60, 10, paddleColor, paddleStroke)
@@ -30,7 +31,7 @@ class Game {
         this.running = false
 
         this.bricks = []
-        this.objects = []
+        this.drops = []
         this.totalPoints = 0
         this.currentLevel = 0
 
@@ -108,14 +109,13 @@ class Game {
         this.bricks = this.levels[this.currentLevel].caller()
         updateLevel(this.levels[this.currentLevel].name)
 
+        this.#clearDisplay()
         this.#clearContext()
         this.#initPaddle()
         this.#initBall()
         this.ball.draw(this.ctx)
         this.paddle.draw(this.ctx)
         this.bricks.forEach((b) => b.draw(this.ctx))
-
-        this.objects = [this.paddle].concat(this.bricks)
     }
 
     nextLevel = () => {
@@ -134,10 +134,26 @@ class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     }
 
+    #clearDisplay = () => {
+        this.powerItemsDomElement.innerHTML = '&nbsp;'
+    }
+
     #redraw = () => {
         this.#clearContext()
 
         this.bricks.forEach((brick) => { if (!brick.destroyed) { brick.draw(this.ctx) } })
+
+        this.drops.forEach((drop) => {
+            if (drop.isAvailable) {
+                drop.draw(this.ctx)
+                drop.offset()
+                if (drop.y + drop.radius > this.canvas.height) {
+                    drop.isAvailable = false
+                }
+            }
+        })
+
+
         this.ball.draw(this.ctx)
         this.ball.offset()
 
@@ -147,7 +163,7 @@ class Game {
             this.paddle.x = this.canvas.width - this.paddle.width / 2
 
         // I don't want to play, I just want to win!
-        // this.paddle.x = this.ball.x
+        this.paddle.x = this.ball.x
         this.paddle.draw(this.ctx)
 
         if ((this.ball.x + this.ball.radius) >= this.canvas.width || (this.ball.x - this.ball.radius) <= 0)
@@ -160,14 +176,35 @@ class Game {
 
         this.bricks.forEach((brick) => {
             if (!brick.destroyed) {
-                let bounced = brick.bounce(this.ball)
+                var bounced = brick.bounce(this.ball)
                 if (bounced) {
                     brick.destroyed = true
                     this.totalPoints += brick.points
                     updatePoints(this.totalPoints)
+                    if (brick.drop != null) {
+                        this.drops.push(brick.drop)
+                    }
                 }
             }
         })
+
+        var activeDrops = []
+        this.drops.forEach((drop) => {
+            if (drop.isAvailable) {
+                if (this.paddle.bounce(drop)) {
+                    drop.apply(this)
+                }
+            }
+            if (drop.isCurrentlyActive) {
+                activeDrops.push(drop.symbol)
+            }
+        })
+        if (activeDrops.length > 0) {
+            this.powerItemsDomElement.innerHTML = activeDrops.join('')
+        }
+        else {
+            this.powerItemsDomElement.innerHTML = '&nbsp;'
+        }
 
         if (this.ball.y - this.ball.radius - 5 > this.canvas.height) {
             this.lost()

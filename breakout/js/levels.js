@@ -1,61 +1,114 @@
 
-createBricks = (brickMatrix, colorMatrix, pointMatrix, brickWidth, brickHeight, padding, canvas) => {
+class Level {
+    constructor() {
+        this.colorMatrix = null
+        this.brickMatrix = null
+        this.pointMatrix = null
+        this.powerItemMatrix = null
 
-    if (!Array.isArray(brickMatrix))
+        this.brickHeight = 20
+        this.brickWidth = 40
+        this.padding = 2
+    }
+}
+
+
+createBricks = (level, canvas) => {
+
+    if (!Array.isArray(level.brickMatrix)) {
         throw "bricks-matrix is not an array"
-    if (!Array.isArray(colorMatrix))
+    }
+    if (!Array.isArray(level.colorMatrix)) {
         throw "color-matrix is not an array"
-    if (!Array.isArray(pointMatrix))
+    }
+    if (!Array.isArray(level.pointMatrix)) {
         throw "point-matrix is not an array"
-    if (brickMatrix.length == 0)
-        throw "brick-matrix is empty"
-    if (colorMatrix.length == 0)
-        throw "color-matrix is empty"
-    if (pointMatrix.length == 0)
-        throw "point-matrix is empty"
+    }
+    if (!Array.isArray(level.powerItemMatrix)) {
+        throw "drops-matrix is not an array"
+    }
 
-    let rowsCount = brickMatrix.length
-    if (rowsCount != colorMatrix.length)
+    if (level.brickMatrix.length == 0) {
+        throw "brick-matrix is empty"
+    }
+    if (level.colorMatrix.length == 0) {
+        throw "color-matrix is empty"
+    }
+    if (level.pointMatrix.length == 0) {
+        throw "point-matrix is empty"
+    }
+    if (level.powerItemMatrix.length == 0) {
+        throw "drops-matrix is empty"
+    }
+
+    let rowsCount = level.brickMatrix.length
+    if (rowsCount != level.colorMatrix.length) {
         throw "brick-matrix and color-matrix have different number of rows"
-    if (rowsCount != pointMatrix.length)
+    }
+    if (rowsCount != level.pointMatrix.length) {
         throw "brick-matrix and point-matrix have different number of rows"
+    }
+    if (rowsCount != level.powerItemMatrix.length) {
+        throw "brick-matrix and drops-matrix have different number of rows"
+    }
 
     columnsCount = 0
-    for (let row = 0; row < brickMatrix.length; row++) {
-        if (!Array.isArray(brickMatrix[row]))
+    for (let row = 0; row < level.brickMatrix.length; row++) {
+        if (!Array.isArray(level.brickMatrix[row]))
             throw "brick-matrix: row " + row + " is not an array"
         if (row === 0) {
-            columnsCount = brickMatrix[row].length
+            columnsCount = level.brickMatrix[row].length
             continue
         }
-        if (brickMatrix[row].length != columnsCount)
+        if (level.brickMatrix[row].length != columnsCount)
             throw "brick-matrix: inconsistent number of columns in row " + row
     }
-    for (let row = 0; row < colorMatrix.length; row++) {
-        if (!Array.isArray(colorMatrix[row]))
-            throw "color-matrix: row " + row + " is not an array"
-        if (colorMatrix[row].length != columnsCount)
-            throw "color-matrix: inconsistent number of columns in row " + row
-        if (!Array.isArray(pointMatrix[row]))
-            throw "point-matrix: row " + row + " is not an array"
-        if (pointMatrix[row].length != columnsCount)
-            throw "point-matrix: inconsistent number of columns in row " + row
+    for (let row = 0; row < level.colorMatrix.length; row++) {
+        if (!Array.isArray(level.colorMatrix[row])) {
+            throw "color-matrix: row " + row + "isn't an array"
+        }
+        if (level.colorMatrix[row].length != columnsCount) {
+            throw "color-matrix: invalid number of columns in row " + row + ", expected "
+            + columnsCount + " found " + level.colorMatrix[row].length
+        }
+        if (!Array.isArray(level.pointMatrix[row])) {
+            throw "point-matrix: row " + row + "isn't an array"
+        }
+        if (level.pointMatrix[row].length != columnsCount) {
+            throw "point-matrix: invalid number of columns in row " + row + ", expected "
+            + columnsCount + " found " + level.pointMatrix[row].length
+        }
+        if (!Array.isArray(level.powerItemMatrix[row])) {
+            throw "drops-matrix: row " + row + "isn't an array"
+        }
+        if (level.powerItemMatrix[row].length != columnsCount) {
+            throw "drops-matrix: invalid number of columns in row " + row + ", expected "
+            + columnsCount + " found " + level.powerItemMatrix[row].length
+        }
     }
 
     bricks = new Array(rowsCount * columnsCount)
-    x_matrix = (canvas.width - brickWidth * columnsCount - (columnsCount - 1) * padding) / 2
-    x_matrix += brickWidth / 2
-    y_matrix = (canvas.height - brickHeight * rowsCount - (rowsCount - 1) * padding) / 2
-    y_matrix += brickHeight / 2
+    x_matrix = (canvas.width - level.brickWidth * columnsCount - (columnsCount - 1) * level.padding) / 2
+    x_matrix += level.brickWidth / 2
+    y_matrix = (canvas.height - level.brickHeight * rowsCount - (rowsCount - 1) * level.padding) / 2
+    y_matrix += level.brickHeight / 2
 
-    for (let row = 0; row < brickMatrix.length; row++) {
-        for (let col = 0; col < brickMatrix[row].length; col++) {
-            if (brickMatrix[row][col] === 1) {
-                x = x_matrix + col * (brickWidth + padding)
-                y = y_matrix + row * (brickHeight + padding)
-                bricks[col + (row * columnsCount)] =
-                    new Brick(x, y, brickWidth, brickHeight, colorMatrix[row][col], '', pointMatrix[row][col])
-
+    for (let row = 0; row < level.brickMatrix.length; row++) {
+        for (let col = 0; col < level.brickMatrix[row].length; col++) {
+            if (level.brickMatrix[row][col] === 1) {
+                x = x_matrix + col * (level.brickWidth + level.padding)
+                y = y_matrix + row * (level.brickHeight + level.padding)
+                brick = new Brick(
+                    x, y,
+                    level.brickWidth, level.brickHeight,
+                    level.colorMatrix[row][col], '', level.pointMatrix[row][col]
+                )
+                if (level.powerItemMatrix[row][col] != '' && level.powerItemMatrix[row][col] != null) {
+                    brick.drop = getNewPowerItem(level.powerItemMatrix[row][col])
+                    brick.drop.x = x
+                    brick.drop.y = y
+                }
+                bricks[col + (row * columnsCount)] = brick
             }
         }
     }
@@ -64,7 +117,9 @@ createBricks = (brickMatrix, colorMatrix, pointMatrix, brickWidth, brickHeight, 
 }
 
 level1 = () => {
-    const brickMatrix = [
+    var level = new Level()
+
+    level.brickMatrix = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -76,7 +131,7 @@ level1 = () => {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
-    const pointMatrix = [
+    level.pointMatrix = [
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
         [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20],
@@ -88,7 +143,7 @@ level1 = () => {
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
     ]
-    const colorMatrix = [
+    level.colorMatrix = [
         ['#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8'],
         ['#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8'],
         ['#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83', '#396B83'],
@@ -100,12 +155,26 @@ level1 = () => {
         ['#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8'],
         ['#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8', '#3281a8'],
     ]
-    return createBricks(brickMatrix, colorMatrix, pointMatrix, 40, 20, 2, game.canvas)
+    level.powerItemMatrix = [
+        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["", "GLASS", "", "", "", "", "", "", "", "", "SHRINK", "", "FAST", "", "", ""],
+        ["", "", "SLOW", "", "", "", "", "POOP", "", "", "SHRINK", "", "", "FUZZ", "", ""],
+        ["", "", "", "", "", "", "EXTEND", "CRAZY_BOUNCE", "POOP", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "POOP", "", "EXTEND", "", "ICE", "", "", ""],
+        ["", "", "", "", "", "ICE", "EXTEND", "FUZZ", "", "", "GLASS", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "SLOW", "", "", "POOP", "FAST", "", "", "", ""],
+        ["", "", "", "", "POOP", "FAST", "", "EXTEND", "", "", "", "", "", "FAST", "CRAZY_BOUNCE", ""],
+        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+    ]
+    return createBricks(level, game.canvas)
 }
 
 
 level2 = () => {
-    const brickMatrix = [
+    var level = new Level()
+
+    level.brickMatrix = [
         [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
         [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
         [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -116,7 +185,7 @@ level2 = () => {
         [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
         [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
     ]
-    const pointMatrix = [
+    level.pointMatrix = [
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
@@ -127,7 +196,7 @@ level2 = () => {
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
     ]
-    const colorMatrix = [
+    level.colorMatrix = [
         ['#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862'],
         ['#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862'],
         ['#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862'],
@@ -138,12 +207,26 @@ level2 = () => {
         ['#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862'],
         ['#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862', '#257862'],
     ]
-    return createBricks(brickMatrix, colorMatrix, pointMatrix, 40, 20, 2, game.canvas)
+    level.powerItemMatrix = [
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', 'POOP', '', 'GLASS', '', '', '', 'POOP', '', '', '', '', ''],
+        ['', '', '', '', 'ICE', '', 'POOP', '', 'CRAZY_BOUNCE', '', 'GLASS', '', '', '', '', '', ''],
+        ['', 'FUZZ', '', '', '', 'SHRINK', '', 'FAST', '', 'CRAZY_BOUNCE', '', 'SLOW', '', '', '', '', ''],
+        ['', '', '', '', 'FUZZ', '', '', '', '', '', '', '', 'POOP', '', '', '', ''],
+        ['', '', '', 'ICE', '', '', '', 'GLASS', '', 'EXTEND', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', 'SHRINK', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', 'EXTEND', '', 'POOP', '', '', '', '', '', '', '', 'GLASS', '', '', ''],
+        ['SLOW', '', '', '', '', '', 'FAST', '', 'FUZZ', '', '', '', 'SHRINK', '', '', '', ''],
+    ]
+
+    return createBricks(level, game.canvas)
 }
 
 
 level3 = () => {
-    const brickMatrix = [
+    var level = new Level()
+
+    level.brickMatrix = [
         [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
         [0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0],
         [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -160,7 +243,7 @@ level3 = () => {
         [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
     ]
-    const pointMatrix = [
+    level.pointMatrix = [
         [0, 0, 15, 15, 0, 0, 0, 15, 15, 0, 0],
         [0, 15, 15, 15, 15, 0, 15, 15, 15, 15, 0],
         [0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0],
@@ -177,7 +260,7 @@ level3 = () => {
         [0, 0, 0, 0, 15, 15, 15, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0],
     ]
-    const colorMatrix = [
+    level.colorMatrix = [
         ['#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114'],
         ['#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114'],
         ['#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114'],
@@ -194,12 +277,32 @@ level3 = () => {
         ['#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114'],
         ['#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114', '#993114'],
     ]
-    return createBricks(brickMatrix, colorMatrix, pointMatrix, 40, 20, 2, game.canvas)
+    level.powerItemMatrix = [
+        ['', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', 'FAST', '', '', '', '', '', ''],
+        ['', '', '', 'FAST', 'POOP', 'EXTEND', '', '', '', '', ''],
+        ['', '', '', '', 'SHRINK', '', '', '', '', 'GLASS', ''],
+        ['', 'FAST', '', '', '', '', '', '', '', '', 'FAST'],
+        ['ICE', 'FUZZ', '', '', '', '', '', '', '', 'POOP', 'SHRINK'],
+        ['', 'SHRINK', 'GLASS', '', '', '', '', '', '', '', ''],
+        ['', '', 'CRAZY_BOUNCE', '', '', '', '', '', '', 'FUZZ', ''],
+        ['', '', 'DEAD', 'EXTEND', '', '', '', '', 'GLASS', '', ''],
+        ['', '', '', 'ICE', '', '', '', '', '', '', ''],
+        ['', '', '', '', 'DEAD', '', 'POOP', '', '', '', ''],
+        ['', '', '', '', 'FUZZ', '', '', '', '', '', ''],
+        ['', '', '', '', 'SHRINK', '', 'FAST', '', '', '', ''],
+        ['', '', '', '', 'FAST', '', '', '', '', '', ''],
+        ['', '', '', '', '', 'POOP', '', '', '', '', ''],
+    ]
+
+    return createBricks(level, game.canvas)
 }
 
 
 level4 = () => {
-    const brickMatrix = [
+    var level = new Level()
+
+    level.brickMatrix = [
         [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
         [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0],
         [0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0],
@@ -213,7 +316,7 @@ level4 = () => {
         [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0],
         [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
     ]
-    const pointMatrix = [
+    level.pointMatrix = [
         [0, 0, 0, 0, 20, 20, 20, 20, 0, 0, 0, 0],
         [0, 0, 20, 20, 20, 0, 0, 20, 20, 20, 0, 0],
         [0, 20, 20, 0, 0, 0, 0, 0, 0, 20, 20, 0],
@@ -228,7 +331,7 @@ level4 = () => {
         [0, 0, 0, 0, 20, 20, 20, 20, 0, 0, 0, 0],
 
     ]
-    const colorMatrix = [
+    level.colorMatrix = [
         ['#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119'],
         ['#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119'],
         ['#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119'],
@@ -242,12 +345,32 @@ level4 = () => {
         ['#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119'],
         ['#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119', '#095119'],
     ]
-    return createBricks(brickMatrix, colorMatrix, pointMatrix, 25, 25, 2, game.canvas)
+    level.powerItemMatrix = [
+        [null, null, null, null, '', '', '', '', null, null, null, null],
+        [null, null, 'SHRINK', '', 'POOP', null, null, '', 'SLOW', '', null, null],
+        [null, 'FAST', 'GLASS', null, null, null, null, null, null, 'FUZZ', 'FAST', null],
+        ['', '', null, null, 'POOP', null, null, 'CRAZY_BOUNCE', null, null, 'EXTEND', ''],
+        ['', null, null, 'FUZZ', 'ICE', null, null, 'POOP', 'DEAD', null, null, ''],
+        ['POOP', null, null, null, null, null, null, null, null, null, null, 'GLASS'],
+        ['ICE', null, '', null, null, null, null, null, null, 'SLOW', null, ''],
+        ['SHRINK', null, null, '', null, null, null, null, 'GLASS', null, null, 'FAST'],
+        ['', '', null, null, '', 'ICE', 'EXTEND', 'POOP', null, null, 'FUZZ', 'FAST'],
+        [null, 'SHRINK', 'CRAZY_BOUNCE', null, null, null, null, null, null, 'POOP', 'DEAD', null],
+        [null, null, 'SHRINK', '', 'FAST', null, null, '', '', 'FAST', null, null],
+        [null, null, null, null, '', 'DEAD', 'SHRINK', '', null, null, null, null],
+    ]
+
+    level.brickHeight = 26
+    level.brickWidth = 26
+
+    return createBricks(level, game.canvas)
 }
 
 
 level5 = () => {
-    const brickMatrix = [
+    var level = new Level()
+
+    level.brickMatrix = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
@@ -259,7 +382,7 @@ level5 = () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ]
-    const pointMatrix = [
+    level.pointMatrix = [
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
         [10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 10, 10],
         [10, 20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 20, 10],
@@ -271,7 +394,7 @@ level5 = () => {
         [10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 10, 10],
         [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
     ]
-    const colorMatrix = [
+    level.colorMatrix = [
         ['#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d'],
         ['#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d'],
         ['#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d'],
@@ -283,12 +406,27 @@ level5 = () => {
         ['#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d'],
         ['#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d', '#a67e2d'],
     ]
-    return createBricks(brickMatrix, colorMatrix, pointMatrix, 40, 20, 2, game.canvas)
+    level.powerItemMatrix = [
+        ['', 'EXTEND', '', '', '', '', '', 'FUZZ', '', '', 'POOP', 'CRAZY_BOUNCE', '', '', 'EXTEND', '', ''],
+        ['FUZZ', '', '', '', 'SHRINK', 'GLASS', '', '', 'FAST', '', 'DEAD', 'POOP', '', '', '', '', ''],
+        ['', 'FAST', null, null, null, null, null, null, null, null, null, null, null, null, null, '', ''],
+        ['', '', null, null, null, null, null, null, null, null, null, null, null, null, null, '', ''],
+        ['', '', '', '', '', 'SHRINK', 'ICE', '', '', '', 'DEAD', '', 'SLOW', '', '', 'ICE', ''],
+        ['', 'SHRINK', '', '', '', 'DEAD', '', '', '', '', '', 'FAST', 'SHRINK', '', '', '', ''],
+        ['', 'POOP', null, null, null, null, null, null, null, null, null, null, null, null, null, '', ''],
+        ['', '', null, null, null, null, null, null, null, null, null, null, null, null, null, '', ''],
+        ['', 'EXTEND', '', 'POOP', 'FAST', 'SHRINK', '', 'GLASS', '', 'GLASS', 'POOP', '', '', '', '', 'POOP', ''],
+        ['FAST', '', '', '', 'FAST', '', '', '', '', 'FUZZ', '', 'EXTEND', '', '', '', 'CRAZY_BOUNCE', ''],
+    ]
+
+    return createBricks(level, game.canvas)
 }
 
 
 level6 = () => {
-    const brickMatrix = [
+    var level = new Level()
+
+    level.brickMatrix = [
         [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
         [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0],
         [0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0],
@@ -304,7 +442,7 @@ level6 = () => {
         [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0],
         [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
     ]
-    const pointMatrix = [
+    level.pointMatrix = [
         [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
         [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
         [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
@@ -320,7 +458,7 @@ level6 = () => {
         [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
         [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
     ]
-    const colorMatrix = [
+    level.colorMatrix = [
         ['#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461'],
         ['#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461'],
         ['#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461'],
@@ -336,5 +474,22 @@ level6 = () => {
         ['#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461'],
         ['#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461', '#913461'],
     ]
-    return createBricks(brickMatrix, colorMatrix, pointMatrix, 40, 20, 2, game.canvas)
+    level.powerItemMatrix = [
+        ['POOP', '', 'SHRINK', '', '', null, null, null, null, null, null, null, 'SHRINK', '', 'DEAD', '', 'POOP'],
+        [null, '', 'DEAD', 'EXTEND', '', 'CRAZY_BOUNCE', null, null, null, null, null, '', 'DEAD', '', 'ICE', '', null],
+        [null, null, '', 'DEAD', '', 'ICE', 'FUZZ', null, null, null, 'EXTEND', '', 'SHRINK', '', '', null, null],
+        [null, null, null, '', 'FAST', '', 'POOP', '', null, '', '', 'DEAD', '', '', null, null, null],
+        [null, null, '', 'FAST', '', 'POOP', '', '', 'DEAD', '', '', 'POOP', '', 'POOP', '', null, null],
+        [null, 'POOP', '', '', 'EXTEND', '', 'FUZZ', 'POOP', '', 'FUZZ', '', '', '', 'FUZZ', '', '', null],
+        ['FAST', '', '', 'DEAD', '', '', 'POOP', 'DEAD', '', 'POOP', '', 'FAST', '', '', 'DEAD', '', ''],
+        ['', 'CRAZY_BOUNCE', '', '', 'SHRINK', '', 'FAST', '', 'POOP', '', 'FAST', '', '', '', '', '', 'POOP'],
+        [null, '', '', 'DEAD', 'FUZZ', '', '', '', 'FAST', '', 'DEAD', '', '', 'DEAD', '', 'CRAZY_BOUNCE', null],
+        [null, null, 'ICE', '', '', 'FUZZ', 'DEAD', '', 'POOP', '', 'FUZZ', '', '', 'FAST', '', null, null],
+        [null, null, null, '', 'EXTEND', '', 'ICE', '', null, 'ICE', '', 'POOP', '', '', null, null, null],
+        [null, null, '', 'DEAD', '', '', 'DEAD', null, null, null, 'POOP', '', 'DEAD', '', 'FAST', null, null],
+        [null, 'POOP', '', '', 'EXTEND', '', null, null, null, null, null, 'FUZZ', '', 'FAST', '', '', null],
+        ['', 'FAST', '', '', 'DEAD', null, null, null, null, null, null, null, 'ICE', '', 'DEAD', '', 'FAST'],
+    ]
+
+    return createBricks(level, game.canvas)
 }

@@ -1,13 +1,23 @@
-toggleVisibility = (divName) => {
+
+blurScreen = (blurLevel) => {
     container = document.getElementById('container')
+    container.style.filter = 'blur(' + blurLevel + 'px)'
+}
+
+unBlurScreen = () => {
+    container = document.getElementById('container')
+    container.style.filter = ''
+}
+
+toggleVisibility = (divName) => {
     div = document.getElementById(divName)
     if (div.style.visibility == '' || div.style.visibility === 'hidden') {
         div.style.visibility = 'visible';
-        container.style.filter = 'blur(10px)'
+        blurScreen(10)
     }
     else {
         div.style.visibility = 'hidden';
-        container.style.filter = ''
+        unBlurScreen()
     }
 }
 

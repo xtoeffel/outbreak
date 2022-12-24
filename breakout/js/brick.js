@@ -4,6 +4,8 @@ class Brick {
         this.y = y
         this.width = width
         this.height = height
+        this.drop = null
+
         this.fillColor = fillColor
         this.strokeColor = strokeColor
 
