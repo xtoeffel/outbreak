@@ -163,7 +163,7 @@ class Game {
             this.paddle.x = this.canvas.width - this.paddle.width / 2
 
         // I don't want to play, I just want to win!
-        this.paddle.x = this.ball.x
+        // this.paddle.x = this.ball.x
         this.paddle.draw(this.ctx)
 
         if ((this.ball.x + this.ball.radius) >= this.canvas.width || (this.ball.x - this.ball.radius) <= 0)
