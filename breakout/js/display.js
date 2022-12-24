@@ -34,12 +34,16 @@ toggleYouWin = () => {
 }
 
 
-updatePoints = (points) => {
+updatePointsDisplay = (points) => {
     document.getElementById("points").innerHTML = points
 }
 
-updateLevel = (level) => {
+updateLevelDisplay = (level) => {
     document.getElementById('level').innerHTML = level
+}
+
+updatePowerItemsDisplay = (powerItems) => {
+    document.getElementById('powerItems').innerHTML = powerItems
 }
 
 

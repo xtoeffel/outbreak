@@ -21,10 +21,10 @@ The paddle can only move left or right.
 
 A life is lost if the ball passes the paddle and falls in the pit.
 
-## Drops
+## Power Items
 
-Some bricks drop items when hit by the ball. 
-These drops can be picked up by the paddle. 
+Some bricks drop power items when hit by the ball. 
+These items can be picked up by the paddle. 
 While some are good others are bad. 
 
 * &#9924; ICE: freezes paddle for a brief time

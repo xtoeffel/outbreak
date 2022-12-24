@@ -9,29 +9,28 @@ init = () => {
 TODO:
 - brick blow up animation
 - improve brick-bouncing
-- add special bricks that drop power-ups ... or other shit, like crazy bounce
-- show points in status bar, show power-ups or power-downs
 */
 class Game {
     constructor() {
-        var ballColor = '#000000'
-        var paddleColor = '#282828'
-        // TODO: remove strokes?
-        var ballStroke = '#e4e4e4'
-        var paddleStroke = '#e4e4e4'
+        this.ballColor = '#000000'
+        this.ballStroke = '#e4e4e4'
+
+        this.paddleColor = '#282828'
+        this.paddleStroke = '#e4e4e4'
+        this.paddleWidth = 60
 
         this.canvas = document.getElementById('game')
         this.ctx = this.canvas.getContext('2d')
         this.powerItemsDomElement = document.getElementById('powerItems')
 
-        this.ball = new Ball(6, ballColor, ballStroke)
-        this.paddle = new Paddle(60, 10, paddleColor, paddleStroke)
+        this.ball = new Ball(6, this.ballColor, this.ballStroke)
+        this.paddle = new Paddle(this.paddleWidth, 10, this.paddleColor, this.paddleStroke)
 
         this.redrawInterval = null
         this.running = false
 
         this.bricks = []
-        this.drops = []
+        this.powerItems = []
         this.totalPoints = 0
         this.currentLevel = 0
 
@@ -46,9 +45,9 @@ class Game {
     }
 
     #initPaddle = () => {
-        this.paddle.stepWidth = 6
         this.paddle.dx = 0
         this.paddle.dy = 0
+        this.paddle.width = this.paddleWidth
         this.paddle.x = this.canvas.width / 2
         this.paddle.y = this.canvas.height - this.paddle.height - 15
     }
@@ -61,18 +60,12 @@ class Game {
         this.ball.dy = - 3
     }
 
-    // TODO: implement
-    showSplash = () => {
-
-    }
-
     isAllBricksDestroyed = () => {
         return this.bricks.every(b => b.destroyed)
     }
 
     newGame = () => {
         this.totalPoints = 0
-        updatePoints(this.totalPoints)
         this.currentLevel = 0
 
         this.playCurrentLevel()
@@ -107,12 +100,14 @@ class Game {
 
     playCurrentLevel = () => {
         this.bricks = this.levels[this.currentLevel].caller()
-        updateLevel(this.levels[this.currentLevel].name)
+        updateLevelDisplay(this.levels[this.currentLevel].name)
 
+        this.powerItems = []
         this.#clearDisplay()
         this.#clearContext()
         this.#initPaddle()
         this.#initBall()
+
         this.ball.draw(this.ctx)
         this.paddle.draw(this.ctx)
         this.bricks.forEach((b) => b.draw(this.ctx))
@@ -135,7 +130,8 @@ class Game {
     }
 
     #clearDisplay = () => {
-        this.powerItemsDomElement.innerHTML = '&nbsp;'
+        updatePointsDisplay(this.totalPoints)
+        updatePowerItemsDisplay('&nbsp;')
     }
 
     #redraw = () => {
@@ -143,12 +139,12 @@ class Game {
 
         this.bricks.forEach((brick) => { if (!brick.destroyed) { brick.draw(this.ctx) } })
 
-        this.drops.forEach((drop) => {
-            if (drop.isAvailable) {
-                drop.draw(this.ctx)
-                drop.offset()
-                if (drop.y + drop.radius > this.canvas.height) {
-                    drop.isAvailable = false
+        this.powerItems.forEach((pItem) => {
+            if (pItem.isAvailable) {
+                pItem.draw(this.ctx)
+                pItem.offset()
+                if (pItem.y + pItem.radius > this.canvas.height) {
+                    pItem.isAvailable = false
                 }
             }
         })
@@ -180,27 +176,27 @@ class Game {
                 if (bounced) {
                     brick.destroyed = true
                     this.totalPoints += brick.points
-                    updatePoints(this.totalPoints)
-                    if (brick.drop != null) {
-                        this.drops.push(brick.drop)
+                    updatePointsDisplay(this.totalPoints)
+                    if (brick.powerItem != null) {
+                        this.powerItems.push(brick.powerItem)
                     }
                 }
             }
         })
 
-        var activeDrops = []
-        this.drops.forEach((drop) => {
-            if (drop.isAvailable) {
-                if (this.paddle.bounce(drop)) {
-                    drop.apply(this)
+        var activePowerItems = []
+        this.powerItems.forEach((pItem) => {
+            if (pItem.isAvailable) {
+                if (this.paddle.bounce(pItem)) {
+                    pItem.apply(this)
                 }
             }
-            if (drop.isCurrentlyActive) {
-                activeDrops.push(drop.symbol)
+            if (pItem.isCurrentlyActive) {
+                activePowerItems.push(pItem.symbol)
             }
         })
-        if (activeDrops.length > 0) {
-            this.powerItemsDomElement.innerHTML = activeDrops.join('')
+        if (activePowerItems.length > 0) {
+            this.powerItemsDomElement.innerHTML = activePowerItems.join('')
         }
         else {
             this.powerItemsDomElement.innerHTML = '&nbsp;'

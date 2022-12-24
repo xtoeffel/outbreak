@@ -139,11 +139,11 @@ const powerItemsTemplates = {
 }
 
 getNewPowerItem = (itemName) => {
-    var dropTemplate = powerItemsTemplates[itemName]
+    var powerItemTemplate = powerItemsTemplates[itemName]
     return new PowerItem(
-        dropTemplate.symbol,
-        dropTemplate.x, dropTemplate.y,
-        dropTemplate.action,
-        dropTemplate.isPermanent, dropTemplate.period
+        powerItemTemplate.symbol,
+        powerItemTemplate.x, powerItemTemplate.y,
+        powerItemTemplate.action,
+        powerItemTemplate.isPermanent, powerItemTemplate.period
     )
 }

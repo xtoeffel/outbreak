@@ -8,7 +8,7 @@ class Level {
 
         this.brickHeight = 20
         this.brickWidth = 40
-        this.padding = 2
+        this.padding = 6
     }
 }
 
@@ -25,7 +25,7 @@ createBricks = (level, canvas) => {
         throw "point-matrix is not an array"
     }
     if (!Array.isArray(level.powerItemMatrix)) {
-        throw "drops-matrix is not an array"
+        throw "powerItem-matrix is not an array"
     }
 
     if (level.brickMatrix.length == 0) {
@@ -38,7 +38,7 @@ createBricks = (level, canvas) => {
         throw "point-matrix is empty"
     }
     if (level.powerItemMatrix.length == 0) {
-        throw "drops-matrix is empty"
+        throw "powerItem-matrix is empty"
     }
 
     let rowsCount = level.brickMatrix.length
@@ -49,7 +49,7 @@ createBricks = (level, canvas) => {
         throw "brick-matrix and point-matrix have different number of rows"
     }
     if (rowsCount != level.powerItemMatrix.length) {
-        throw "brick-matrix and drops-matrix have different number of rows"
+        throw "brick-matrix and powerItem-matrix have different number of rows"
     }
 
     columnsCount = 0
@@ -79,10 +79,10 @@ createBricks = (level, canvas) => {
             + columnsCount + " found " + level.pointMatrix[row].length
         }
         if (!Array.isArray(level.powerItemMatrix[row])) {
-            throw "drops-matrix: row " + row + "isn't an array"
+            throw "powerItem-matrix: row " + row + "isn't an array"
         }
         if (level.powerItemMatrix[row].length != columnsCount) {
-            throw "drops-matrix: invalid number of columns in row " + row + ", expected "
+            throw "powerItem-matrix: invalid number of columns in row " + row + ", expected "
             + columnsCount + " found " + level.powerItemMatrix[row].length
         }
     }
@@ -104,9 +104,9 @@ createBricks = (level, canvas) => {
                     level.colorMatrix[row][col], '', level.pointMatrix[row][col]
                 )
                 if (level.powerItemMatrix[row][col] != '' && level.powerItemMatrix[row][col] != null) {
-                    brick.drop = getNewPowerItem(level.powerItemMatrix[row][col])
-                    brick.drop.x = x
-                    brick.drop.y = y
+                    brick.powerItem = getNewPowerItem(level.powerItemMatrix[row][col])
+                    brick.powerItem.x = x
+                    brick.powerItem.y = y
                 }
                 bricks[col + (row * columnsCount)] = brick
             }

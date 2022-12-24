@@ -7,7 +7,6 @@ class Paddle {
 
         this.x = 0
         this.y = 0
-        this.stepWidth = 2
         this.dx = 0
         this.dy = 0
 
@@ -52,8 +51,8 @@ class Paddle {
         return this.y + this.height / 2
     }
 
-    bounce = (ballOrDropItem) => {
-        return this.bouncer.bounce(ballOrDropItem, this.leftX(), this.topY(), this.rightX(), this.bottomY())
+    bounce = (ballOrPowerItem) => {
+        return this.bouncer.bounce(ballOrPowerItem, this.leftX(), this.topY(), this.rightX(), this.bottomY())
     }
 
 }

@@ -65,7 +65,6 @@ class BounceBoxWithEdges {
     }
 
     // TODO: fix weird edge to center stick bounce on paddle
-    // TODO: remove? edge bounce seems not to work that well
     // TODO: does small overlap of bound boxes cause weird ball moves?
     bounce = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
         const dW = 0
