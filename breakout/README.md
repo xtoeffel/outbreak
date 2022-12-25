@@ -21,6 +21,7 @@ The paddle can only move left or right.
 
 A life is lost if the ball passes the paddle and falls in the pit.
 
+
 ## Power Items
 
 Some bricks drop power items when hit by the ball. 
@@ -36,8 +37,16 @@ While some are good others are bad.
 * &#128012; SLOW: slows down ball for a short time
 * &#127744; CRAZY-BOUNCE: ball bounces funny for some time
 * &#128128; DEAD: instant death
-* &#128169; POOP: you stepped in poop which brings luck ;)
+* &#128169; POOP: you stepped in poop which brings luck :wink:
+
 
 ## Implementation
 
 The game runs in the browser, it's :balloon: programmed in `HTML` and `JavaScript`.
+
+
+## Try it out
+
+You can try it out [here](http://bauplanung-dittmar.de/breakout).
+
+Note that it seems to run faster and smoother on Edge or Chrome and hang a bit on FireFox :disappointed:.
