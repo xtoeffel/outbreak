@@ -28,11 +28,6 @@ class PowerItem {
     }
 
     draw = (ctx) => {
-        // ctx.beginPath()
-        // ctx.fillStyle = this.fillColor
-        // ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
-        // ctx.fill()
-        // ctx.closePath()
         ctx.font = this.size + "px serif"
         ctx.textBaseLine = 'middle'
         ctx.textAlign = 'center'
@@ -114,7 +109,6 @@ const powerItemsTemplates = {
             }, 5000)
         }
     ),
-    // TODO: implement crazy bounce
     'CRAZY_BOUNCE': new PowerItem(
         '🌀', 0, 0,
         (g, item) => {

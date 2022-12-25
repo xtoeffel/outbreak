@@ -78,13 +78,6 @@ class Brick {
 
     bounce = (ball) => {
         return this.bouncer.bounce(ball, this.leftX(), this.topY(), this.rightX(), this.bottomY())
-        // var outLines = [
-        //     new Line(new Point(this.leftX(), this.topY()), new Point(this.rightX(), this.topY())),
-        //     new Line(new Point(this.leftX(), this.topY()), new Point(this.leftX(), this.bottomY())),
-        //     new Line(new Point(this.rightX(), this.topY()), new Point(this.rightX(), this.bottomY())),
-        //     new Line(new Point(this.leftX(), this.bottomY()), new Point(this.rightX(), this.bottomY())),
-        // ]
-        // return this.bouncer.bounce(ball, outLines)
     }
 }
 

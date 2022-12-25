@@ -30,7 +30,6 @@ mouseMove = (event) => {
     const relativeX = event.clientX - (document.body.clientWidth - game.canvas.clientWidth) / 2
     if (relativeX > 0 && relativeX < game.canvas.width) {
         game.paddle.dx = relativeX - game.paddle.x
-        // game.paddle.x = relativeX
         game.paddle.moveTo(relativeX, game.paddle.y)
     }
 }

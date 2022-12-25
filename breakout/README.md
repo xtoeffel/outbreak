@@ -49,4 +49,4 @@ The game runs in the browser, it's :balloon: programmed in `HTML` and `JavaScrip
 
 You can try it out [here](http://bauplanung-dittmar.de/breakout).
 
-Note that it seems to run faster and smoother on Edge or Chrome and hang a bit on FireFox :disappointed:.
+Note that it seems to run faster and smoother on Edge or Chrome and might hang a bit on FireFox :disappointed:.

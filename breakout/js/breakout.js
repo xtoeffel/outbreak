@@ -8,7 +8,6 @@ init = () => {
 /*
 TODO:
 - brick blow up animation
-- improve brick-bouncing
 */
 class Game {
     constructor() {
