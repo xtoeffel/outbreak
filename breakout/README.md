@@ -40,4 +40,4 @@ While some are good others are bad.
 
 ## Implementation
 
-The game runs in the browser, it's :balloon: programmed `HTML` and `JavaScript`.
+The game runs in the browser, it's :balloon: programmed in `HTML` and `JavaScript`.
