@@ -7,7 +7,7 @@ class BounceBox {
 
     // TODO: fix weird stick bounce on paddle
     bounce = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
-        var outerBox = new Box(
+        let outerBox = new Box(
             leftX - ball.radius - this.dBox, topY - ball.radius - this.dBox,
             rightX + ball.radius + this.dBox, bottomY + ball.radius + this.dBox
         )
@@ -15,30 +15,30 @@ class BounceBox {
             return false
         }
 
-        var leftSideBox = new Box(
+        let leftSideBox = new Box(
             leftX - ball.radius - this.dBox, topY - ball.radius / 2,
             leftX, bottomY + ball.radius / 2
         )
-        var rightSideBox = new Box(
+        let rightSideBox = new Box(
             rightX, topY - ball.radius / 2,
             rightX + ball.radius + this.dBox, bottomY + ball.radius / 2
         )
 
-        var topBox = new Box(
+        let topBox = new Box(
             leftX - ball.radius / 2, topY - ball.radius - this.dBox,
             rightX + ball.radius / 2, topY
         )
-        var botBox = new Box(
+        let botBox = new Box(
             leftX - ball.radius / 2, bottomY,
             rightX + ball.radius / 2, bottomY + ball.radius + this.dBox
         )
         // compute new ball.dx by adding the speed of the counter-movement
         // that's usually the paddle moving with or against the ball horizontally
         // first speeds ball up, second slows it down, no paddle move -> no effect
-        var dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
+        let dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
         // preserve the direction of ball in y-coords
-        var dyBallDir = ball.dy / Math.abs(ball.dy)
-        var dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
+        let dyBallDir = ball.dy / Math.abs(ball.dy)
+        let dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
 
         if (leftSideBox.isCoordsWithin(ball.x, ball.y)
             || rightSideBox.isCoordsWithin(ball.x, ball.y)) {
@@ -69,20 +69,20 @@ class BounceBoxWithEdges {
     bounce = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
         const dW = 0
 
-        var outerBoundBox = new Box(
+        let outerBoundBox = new Box(
             leftX - ball.radius - dW, topY - ball.radius - dW,
             rightX + ball.radius + dW, bottomY + ball.radius + dW
         )
-        var leftSideBoundBox = new Box(leftX - ball.radius - dW, topY, leftX, bottomY)
-        var rightSideBoundBox = new Box(rightX, topY, rightX + ball.radius + dW, bottomY)
+        let leftSideBoundBox = new Box(leftX - ball.radius - dW, topY, leftX, bottomY)
+        let rightSideBoundBox = new Box(rightX, topY, rightX + ball.radius + dW, bottomY)
 
-        var topBoundBox = new Box(leftX, topY - ball.radius - dW, rightX, topY)
-        var botBoundBox = new Box(leftX, bottomY, rightX, bottomY + ball.radius + dW)
+        let topBoundBox = new Box(leftX, topY - ball.radius - dW, rightX, topY)
+        let botBoundBox = new Box(leftX, bottomY, rightX, bottomY + ball.radius + dW)
 
-        var topLeftEdgeBox = new Box(leftX - ball.radius - dW, topY - ball.radius - dW, leftX, topY)
-        var topRightEdgeBox = new Box(rightX, topY - ball.radius - dW, rightX + ball.radius + dW, topY)
-        var botLeftEdgeBox = new Box(leftX - ball.radius - dW, bottomY, leftX, bottomY + ball.radius + dW)
-        var botRightEdgeBox = new Box(rightX, bottomY, rightX + ball.radius + dW, bottomY + ball.radius + dW)
+        let topLeftEdgeBox = new Box(leftX - ball.radius - dW, topY - ball.radius - dW, leftX, topY)
+        let topRightEdgeBox = new Box(rightX, topY - ball.radius - dW, rightX + ball.radius + dW, topY)
+        let botLeftEdgeBox = new Box(leftX - ball.radius - dW, bottomY, leftX, bottomY + ball.radius + dW)
+        let botRightEdgeBox = new Box(rightX, bottomY, rightX + ball.radius + dW, bottomY + ball.radius + dW)
 
 
         if (!outerBoundBox.isCoordsWithin(ball.x, ball.y)) {
@@ -92,10 +92,10 @@ class BounceBoxWithEdges {
         // compute new ball.dx by adding the speed of the counter-movement
         // that's usually the paddle moving with or against the ball horizontally
         // first speeds ball up, second slows it down, no paddle move -> no effect
-        var dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
+        let dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
         // preserve the direction of ball in y-coords
-        var dyBallDir = ball.dy / Math.abs(ball.dy)
-        var dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
+        let dyBallDir = ball.dy / Math.abs(ball.dy)
+        let dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
 
         if (leftSideBoundBox.isCoordsWithin(ball.x, ball.y)
             || rightSideBoundBox.isCoordsWithin(ball.x, ball.y)) {
@@ -189,7 +189,7 @@ class BounceBoxCrazy {
     }
 
     bounce = (ball, leftX, topY, rightX, bottomY, dx = 0) => {
-        var outerBox = new Box(
+        let outerBox = new Box(
             leftX - ball.radius - this.dBox, topY - ball.radius - this.dBox,
             rightX + ball.radius + this.dBox, bottomY + ball.radius + this.dBox
         )
@@ -197,32 +197,32 @@ class BounceBoxCrazy {
             return false
         }
 
-        var leftSideBox = new Box(
+        let leftSideBox = new Box(
             leftX - ball.radius - this.dBox, topY - ball.radius / 2,
             leftX, bottomY + ball.radius / 2
         )
-        var rightSideBox = new Box(
+        let rightSideBox = new Box(
             rightX, topY - ball.radius / 2,
             rightX + ball.radius + this.dBox, bottomY + ball.radius / 2
         )
 
-        var topBox = new Box(
+        let topBox = new Box(
             leftX - ball.radius / 2, topY - ball.radius - this.dBox,
             rightX + ball.radius / 2, topY
         )
-        var botBox = new Box(
+        let botBox = new Box(
             leftX - ball.radius / 2, bottomY,
             rightX + ball.radius / 2, bottomY + ball.radius + this.dBox
         )
         // compute new ball.dx by adding the speed of the counter-movement
         // that's usually the paddle moving with or against the ball horizontally
         // first speeds ball up, second slows it down, no paddle move -> no effect
-        var dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
+        let dxBall = Math.round(ball.dx + dx / Math.abs(ball.dx))
         // preserve the direction of ball in y-coords
-        var dyBallDir = ball.dy / Math.abs(ball.dy)
-        var dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
+        let dyBallDir = ball.dy / Math.abs(ball.dy)
+        let dyBall = dyBallDir * Math.round(Math.sqrt(Math.pow(ball.velocity(), 2) - Math.pow(dxBall, 2)))
 
-        var dir = Math.random() > 0.5 ? 1 : -1
+        let dir = Math.random() > 0.5 ? 1 : -1
         if (leftSideBox.isCoordsWithin(ball.x, ball.y)
             || rightSideBox.isCoordsWithin(ball.x, ball.y)) {
             ball.dx *= -1

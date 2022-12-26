@@ -117,7 +117,7 @@ createBricks = (level, canvas) => {
 }
 
 level1 = () => {
-    var level = new Level()
+    let level = new Level()
 
     level.brickMatrix = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -172,7 +172,7 @@ level1 = () => {
 
 
 level2 = () => {
-    var level = new Level()
+    let level = new Level()
 
     level.brickMatrix = [
         [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -224,7 +224,7 @@ level2 = () => {
 
 
 level3 = () => {
-    var level = new Level()
+    let level = new Level()
 
     level.brickMatrix = [
         [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
@@ -300,7 +300,7 @@ level3 = () => {
 
 
 level4 = () => {
-    var level = new Level()
+    let level = new Level()
 
     level.brickMatrix = [
         [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
@@ -368,7 +368,7 @@ level4 = () => {
 
 
 level5 = () => {
-    var level = new Level()
+    let level = new Level()
 
     level.brickMatrix = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -424,7 +424,7 @@ level5 = () => {
 
 
 level6 = () => {
-    var level = new Level()
+    let level = new Level()
 
     level.brickMatrix = [
         [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],

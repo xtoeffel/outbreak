@@ -133,7 +133,7 @@ const powerItemsTemplates = {
 }
 
 getNewPowerItem = (itemName) => {
-    var powerItemTemplate = powerItemsTemplates[itemName]
+    let powerItemTemplate = powerItemsTemplates[itemName]
     return new PowerItem(
         powerItemTemplate.symbol,
         powerItemTemplate.x, powerItemTemplate.y,

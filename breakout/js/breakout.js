@@ -54,7 +54,7 @@ class Game {
     #initBall = () => {
         this.ball.x = this.paddle.x
         this.ball.y = this.paddle.topY() - this.ball.radius
-        var xDir = Math.random() > 0.5 ? -1 : 1
+        let xDir = Math.random() > 0.5 ? -1 : 1
         this.ball.dx = xDir * 3
         this.ball.dy = - 3
     }
@@ -183,7 +183,7 @@ class Game {
             }
         })
 
-        var activePowerItems = []
+        let activePowerItems = []
         this.powerItems.forEach((pItem) => {
             if (pItem.isAvailable) {
                 if (this.paddle.bounce(pItem)) {
