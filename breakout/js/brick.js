@@ -14,6 +14,7 @@ class Brick {
         this.shadowColor = '#8d8d8d'
         this.shadowOffsetX = 3
         this.shadowOffsetY = 3
+        this.shadowBlur = 5
 
         this.destroyed = false
         this.bouncer = new BounceBox()
@@ -25,6 +26,7 @@ class Brick {
         ctx.shadowColor = this.shadowColor
         ctx.shadowOffsetX = this.shadowOffsetX
         ctx.shadowOffsetY = this.shadowOffsetY
+        ctx.shadowBlur = this.shadowBlur
         ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height)
 
         ctx.shadowColor = ''
@@ -58,6 +60,7 @@ class Brick {
         // need to reset fillStyle to full opacity color (any will do)
         // otherwise power items will have the brick overlay fillStyle
         ctx.fillStyle = '#ffffff'
+        ctx.shadowBlur = 0
     }
 
     leftX = () => {

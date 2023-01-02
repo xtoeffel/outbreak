@@ -17,7 +17,12 @@ class Paddle {
 
     draw = (ctx) => {
         ctx.fillStyle = this.fillColor
+        ctx.shadowOffsetX = 2
+        ctx.shadowOffsetY = 2
+        ctx.shadowBlur = 5
+        ctx.shadowColor = 'gray'
         ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height)
+        ctx.shadowBlur = 0
         // TODO: outer stroke?
     }
 

@@ -35,7 +35,7 @@ While some are good others are bad.
 * &#128064; GLASS: paddle turns into glass for a short time
 * &#128007; FAST: speeds up ball for a short time
 * &#128012; SLOW: slows down ball for a short time
-* &#127744; CRAZY-BOUNCE: ball bounces funny for some time
+* &#129313; CRAZY-BOUNCE: ball bounces funny for some time
 * &#128128; DEAD: instant death
 * &#128169; POOP: you stepped in poop which brings luck :wink:
 

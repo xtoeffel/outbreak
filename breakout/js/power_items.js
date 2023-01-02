@@ -110,7 +110,7 @@ const powerItemsTemplates = {
         }
     ),
     'CRAZY_BOUNCE': new PowerItem(
-        '🌀', 0, 0,
+        '🤡', 0, 0,
         (g, item) => {
             currentBouncerPaddle = g.paddle.bouncer
             g.paddle.bouncer = new BounceBoxCrazy()
